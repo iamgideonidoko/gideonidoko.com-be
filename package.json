@@ -1,0 +1,36 @@
+{
+  "name": "gideonidoko-website-backend",
+  "version": "1.0.0",
+  "description": "Gideon Idoko's Personal Website Backend",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "server": "nodemon server.js"
+  },
+  "keywords": [
+    "gideon",
+    "idoko",
+    "portfolio",
+    "website",
+    "backend"
+  ],
+  "author": "Gideon Idoko <iamgideonidoko@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.0",
+    "express": "^4.17.3",
+    "express-rate-limit": "^6.3.0",
+    "express-validator": "^6.14.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.2.3",
+    "pingmydyno": "^1.5.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  },
+  "engines": {
+    "node": "16.x"
+  }
+}
