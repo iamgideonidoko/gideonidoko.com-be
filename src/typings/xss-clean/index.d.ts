@@ -1,3 +1,3 @@
 declare module 'xss-clean' {
-  export default function xss(): () => void;
+    export default function xss(): () => void;
 }

@@ -71,5 +71,10 @@
   },
   "engines": {
     "node": "16.x"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn lint"
+    }
   }
 }
