@@ -46,20 +46,20 @@ postRoute.post('/post', [auth, validateDto(newPostAjvValidate)], createPost);
 @description 	Delete a single blog post with given id
 @access 		Private (auth needed)
 */
-router.delete('/post/:id', auth, deletePost);
+postRoute.delete('/post/:id', auth, deletePost);
 
 /*
 @route 			PUT api/v1/post/:id
 @description 	update a single blog post with given id
 @access 		Private (auth needed)
 */
-router.put('/post/:id', auth, updatePost);
+postRoute.put('/post/:id', auth, updatePost);
 
 /*
 @route 			PUT api/v1/post/:id/comments
 @description 	update a single blog post (just the comments) with given id
 @access 		Public (any one can comment)
 */
-router.put('/post/:id/comments', updatePostComments);
+postRoute.put('/post/:id/comments', updatePostComments);
 
 export default postRoute;

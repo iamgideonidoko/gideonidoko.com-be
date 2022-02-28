@@ -12,6 +12,7 @@ import {
     removePostFromDb,
 } from '../services/post.service';
 import { strToSlug } from '../helpers/post.helper';
+import constants from '../../../config/constants.config';
 
 export const getPosts = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -126,7 +127,7 @@ export const updatePostComments = async (req: Request, res: Response, next: Next
     const { id } = req.params;
     const { comments, commentsUpdateAccessKey } = req.body;
 
-    if (commentsUpdateAccessKey !== config.commentsUpdateAccessKey) return next(new createError.Unauthorized());
+    if (commentsUpdateAccessKey !== constants.commentsUpdateAccessKey) return next(new createError.Unauthorized());
 
     try {
         const updatedPost = await updatePostCommentsInDb(id, comments);

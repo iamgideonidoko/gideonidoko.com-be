@@ -3,9 +3,7 @@ import User from '../models/user.model';
 import { RegisterReturn } from '../interfaces/user.interface';
 import { validatePassword } from '../helpers/password.helper';
 import { signAccessToken, verifyRefreshToken, signRefreshToken } from '../helpers/jwt.helper';
-import { getRedisClient } from '../../../config/redis.config';
-
-const client = getRedisClient();
+import client from '../../../config/redis.config';
 
 export const getUserFromDb = async (username: string, userPassword: string): Promise<RegisterReturn> => {
     return new Promise<RegisterReturn>(async (resolve, reject) => {

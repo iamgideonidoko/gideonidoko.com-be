@@ -1,7 +1,7 @@
 import { Request } from 'express';
 
 export interface LoggedInUserRequest extends Request {
-    user: {
+    user?: {
         id: string;
     };
 }

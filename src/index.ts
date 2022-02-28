@@ -11,7 +11,7 @@ import limiter from './config/rateLimiter.config';
 import appCors from './config/cors.config';
 import mongoose from 'mongoose';
 import constants from './config/constants.config';
-import connectRedisClient from './config/redis.config';
+import client from './config/redis.config';
 // Routes Import
 import userRoute from './api/v1/routes/user.route';
 import authRoute from './api/v1/routes/auth.route';
@@ -22,11 +22,6 @@ import contactRoute from './api/v1/routes/contact.route';
 // console.log('Client => ', client);
 
 config();
-
-(async () => {
-    // connect to redis
-    await connectRedisClient();
-})();
 
 // boostrap the express application
 const app: Application = express();
@@ -60,19 +55,28 @@ app.use(limiter());
 app.use(appCors());
 
 /* 
+@description    Connection to redis cache
+*/
+(async () => {
+    // connect to redis
+    try {
+        await client.connect();
+    } catch (err) {
+        console.log('REDIS CONNECTION ERROR: ', err);
+    }
+})();
+
+/* 
 @description    MongoDB Connection using Mongoose ORM
 */
-mongoose
-    .connect(
-        constants.mongodbURI /* , {
-    useNewUrlParser: true,
-    useCreateIndex: true,
-    useUnifiedTopology: true,
-    useFindAndModify: false,
-  } */,
-    )
-    .then(() => console.log('MongoDB Connected...'))
-    .catch((err) => console.log('MONGODB CONNECTION ERROR: ' + err));
+(async () => {
+    try {
+        await mongoose.connect(constants.mongodbURI);
+        console.log('Mongo yeye');
+    } catch (err) {
+        console.log('MONGODB CONNECTION ERROR: ' + err);
+    }
+})();
 
 // Routes
 app.get('/', (_req: Request, res: Response) => {

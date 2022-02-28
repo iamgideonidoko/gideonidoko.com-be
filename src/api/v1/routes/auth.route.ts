@@ -11,7 +11,7 @@ const authRoute = Router();
 @description     authenticate the admin user.
 @access          Public
 */
-router.post('/auth/login', validateDto(loginUserAjvValidate), loginUser);
+authRoute.post('/auth/login', validateDto(loginUserAjvValidate), loginUser);
 
 /*
 @route 			POST /api/v1/auth/login (logout user)
@@ -32,6 +32,6 @@ authRoute.post('/auth/refresh', validateDto(refreshTokenAjvValidate), refreshUse
 @description Get authenticated admin user data.
 @access Private
 */
-router.get('/auth/user', auth, getLoggedInUser);
+authRoute.get('/auth/user', auth, getLoggedInUser);
 
 export default authRoute;

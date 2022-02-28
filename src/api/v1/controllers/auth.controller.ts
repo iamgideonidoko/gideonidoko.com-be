@@ -62,7 +62,7 @@ export const logoutUser = async (req: Request, res: Response, next: NextFunction
 
 export const getLoggedInUser = async (req: LoggedInUserRequest, res: Response, next: NextFunction) => {
     try {
-        const user = await User.findById(req.user.id).select('-password'); //removes the password from the selection
+        const user = await User.findById(req.user?.id).select('-password'); //removes the password from the selection
         if (user) {
             return createSuccess(res, 200, 'User fetched successfully', user);
         }

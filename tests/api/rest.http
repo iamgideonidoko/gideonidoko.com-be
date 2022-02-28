@@ -1,0 +1,23 @@
+###
+POST http://localhost:5000/api/v1/user/register
+Content-Type: application/json; charset=utf-8
+
+{
+    "name": "Simon Paul",
+    "email": "simon@paul.com",
+    "password": "1234",
+    "retype_password": "1234"
+}
+
+### LOGIN USER
+POST http://localhost:5000/api/v1/auth/login
+Content-Type: application/json; charset=utf-8
+
+{
+    "email": "simon@paul.com",
+    "password": "1234"
+}
+
+### GET POSTS
+GET http://localhost:5000/api/v1/contacts
+Content-Type: application/json; charset=utf-8

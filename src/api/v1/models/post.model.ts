@@ -44,7 +44,7 @@ const PostSchema = new Schema<IPost>({
     updated_at: Date,
     comments: [
         {
-            commentID: mongoose.ObjectId,
+            commentID: { type: Schema.Types.ObjectId },
             comment_author: String,
             comment_body: String,
             isAdmin: {
@@ -61,7 +61,7 @@ const PostSchema = new Schema<IPost>({
             },
             replies: [
                 {
-                    replyID: mongoose.ObjectId,
+                    replyID: { type: Schema.Types.ObjectId },
                     reply_author: String,
                     reply_body: String,
                     isAdmin: {

@@ -1,6 +1,9 @@
 import { createClient } from 'redis';
+import constants from './constants.config';
 
-const client = createClient();
+const client = createClient({
+    url: constants.redisURI,
+});
 
 client.on('error', (err) => console.log('Redis Client Error => ', err));
 client.on('connect', () => console.log('Connected to Redis...'));
@@ -9,12 +12,4 @@ client.on('end', () => console.log('Client disconnected from Redis...'));
 client.on('end', () => console.log('Client disconnected from Redis...'));
 client.on('SIGINT', () => client.quit());
 
-const connectRedisClient = async (): Promise<unknown> => {
-    await client.connect();
-
-    return client;
-};
-
-export const getRedisClient = () => client;
-
-export default connectRedisClient;
+export default client;

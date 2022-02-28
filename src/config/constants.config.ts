@@ -6,6 +6,7 @@ config();
 
 type Constants = {
     mongodbURI: string;
+    redisURI: string;
     accessTokenSecret: Secret;
     refreshTokenSecret: Secret;
     commentsUpdateAccessKey: string;
@@ -17,6 +18,7 @@ type Constants = {
 
 const constants: Constants = {
     mongodbURI: process.env.MONGODB_URI as string,
+    redisURI: process.env.REDIS_URI as string,
     accessTokenSecret: process.env.ACCESS_TOKEN_SECRET as Secret,
     refreshTokenSecret: process.env.REFRESH_TOKEN_SECRET as Secret,
     commentsUpdateAccessKey: process.env.COMMENTS_UPDATE_ACCESS_KEY as string,

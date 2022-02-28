@@ -3,6 +3,7 @@ import { Request, Response, NextFunction } from 'express';
 import createError from 'http-errors';
 import { createSuccess } from '../helpers/http.helper';
 import { checkIfAssetExists, removeAssetFromDb } from '../services/asset.service';
+import Asset from '../models/asset.model';
 
 export const addAsset = async (req: Request, res: Response, next: NextFunction) => {
     const { name, url, size, file_type, author_username, author_name } = req.body;
