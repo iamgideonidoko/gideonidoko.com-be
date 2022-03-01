@@ -62,6 +62,7 @@ export const fetchSearchedPosts = (query: string): Promise<unknown> => {
                 $or: [{ title: { $regex: query, $options: 'i' } }, { description: { $regex: query, $options: 'i' } }],
             })
                 .select('-body -comments')
+                .sort({ created_at: -1 })
                 .limit(10);
             resolve(searchedPosts);
         } catch (err) {

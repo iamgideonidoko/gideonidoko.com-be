@@ -21,11 +21,11 @@ Content-Type: application/json; charset=utf-8
 }
 
 ### GET STUFF
-GET http://localhost:5000/api/v1/posts?per_page=4&page=1
+GET http://localhost:5000/api/v1/contacts?per_page=4&page=1
 Content-Type: application/json; charset=utf-8
 
 ### SEARCH STUFF
-GET http://localhost:5000/api/v1/posts/search?q=reflect 
+GET http://localhost:5000/api/v1/assets/search?q=re
 Content-Type: application/json; charset=utf-8
 
 

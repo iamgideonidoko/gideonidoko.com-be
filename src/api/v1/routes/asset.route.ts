@@ -1,4 +1,4 @@
-import { addAsset, deleteAsset, getAssets } from './../controllers/asset.controller';
+import { addAsset, deleteAsset, getAssets, getSearchedAssets } from './../controllers/asset.controller';
 import { Router } from 'express';
 import auth from '../middlewares/auth.middleware';
 
@@ -10,6 +10,13 @@ const assetRoute = Router();
 @access Private
 */
 assetRoute.post('/asset', auth, addAsset);
+
+/*
+@route POST     /api/v1/assets/search?q=term
+@description    Add a new asset.
+@access         Private
+*/
+assetRoute.get('/assets/search', getSearchedAssets);
 
 /*
 @route GET /api/v1/assets

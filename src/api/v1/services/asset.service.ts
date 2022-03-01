@@ -65,3 +65,20 @@ export const removeAssetFromDb = (assetId: string): Promise<boolean> => {
         }
     });
 };
+
+export const fetchSearchedAssets = (query: string): Promise<unknown> => {
+    return new Promise<unknown>(async (resolve, reject) => {
+        try {
+            // strip special characters
+            query = query.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g, '');
+            const searchedAssets = await Asset.find({
+                $or: [{ name: { $regex: query, $options: 'i' } }, { file_type: { $regex: query, $options: 'i' } }],
+            })
+                .sort({ created_at: -1 })
+                .limit(10);
+            resolve(searchedAssets);
+        } catch (err) {
+            reject(err);
+        }
+    });
+};

@@ -23,8 +23,8 @@ const postRoute = Router();
 postRoute.get('/posts', getPosts);
 
 /*
-@route 			GET /api/v1/posts/search
-@description 	Get all available blog posts
+@route 			GET /api/v1/posts/search?q=term
+@description 	Search through blog posts
 @access 		Public
 */
 postRoute.get('/posts/search', getSearchedPosts);
