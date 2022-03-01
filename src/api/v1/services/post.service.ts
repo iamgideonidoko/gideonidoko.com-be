@@ -3,6 +3,30 @@ import Post from '../models/post.model';
 import { IPost, NewPost } from '../interfaces/post.interface';
 import User from '../models/user.model';
 import { IUser } from '../interfaces/user.interface';
+import { PaginateOptions, PaginateResult } from 'mongoose';
+
+export const fetchPaginatedPosts = (
+    page: number,
+    perPage: number,
+): Promise<PaginateResult<IPost & { _id: string }>> => {
+    return new Promise<PaginateResult<IPost & { _id: string }>>(async (resolve, reject) => {
+        const paginationOptions: PaginateOptions = {
+            select: '-body -comments',
+            page,
+            limit: perPage,
+            customLabels: {
+                limit: 'perPage',
+            },
+        };
+
+        try {
+            const paginatedPosts = await Post.paginate({}, paginationOptions);
+            resolve(paginatedPosts);
+        } catch (err) {
+            reject(err);
+        }
+    });
+};
 
 export const fetchPostBySlug = (slug: string): Promise<IPost & { _id: string }> => {
     return new Promise<IPost & { _id: string }>(async (resolve, reject) => {
@@ -16,11 +40,23 @@ export const fetchPostBySlug = (slug: string): Promise<IPost & { _id: string }> 
     });
 };
 
-export const fetchAuthorPostsByUsername = (author_username: string): Promise<Array<IPost & { _id: string }>> => {
-    return new Promise<Array<IPost & { _id: string }>>(async (resolve, reject) => {
+export const fetchAuthorPostsByUsername = (
+    author_username: string,
+    page: number,
+    perPage: number,
+): Promise<PaginateResult<IPost & { _id: string }>> => {
+    return new Promise<PaginateResult<IPost & { _id: string }>>(async (resolve, reject) => {
+        const paginationOptions: PaginateOptions = {
+            select: '-body -comments',
+            page,
+            limit: perPage,
+            customLabels: {
+                limit: 'perPage',
+            },
+        };
         try {
             //Check for existing user in that model through password
-            const posts = await Post.find({ author_username });
+            const posts = await Post.paginate({ author_username }, paginationOptions);
             if (!posts) reject(new createError.NotFound(''));
             resolve(posts);
         } catch (err) {

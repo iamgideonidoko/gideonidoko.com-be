@@ -13,11 +13,11 @@ const auth = (req: AuthReq, _res: Response, next: NextFunction): void => {
     const bearerToken = req.header('Authorization');
 
     // check if token is available
-    if (!bearerToken) return next(createError(401, 'No token, authorisation denied.'));
+    if (!bearerToken) return next(createError(401, 'Auth token is invalid or not provided'));
     const bearer = bearerToken.split(' ')[0];
     const token = bearerToken.split(' ')[1];
 
-    if (bearer !== 'Bearer' || !token) return next(createError(401, 'No token, authorisation denied.'));
+    if (bearer.trim() !== 'Bearer' || !token) return next(createError(401, 'Auth token is invalid or not provided'));
 
     try {
         //if there is a token, then verify

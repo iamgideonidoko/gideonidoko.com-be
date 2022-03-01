@@ -19,8 +19,10 @@ export const getUserFromDb = async (username: string, userPassword: string): Pro
 
                 if (match) {
                     const accessToken = await signAccessToken({ id });
+                    const refreshToken = await signRefreshToken({ id });
                     resolve({
                         accessToken,
+                        refreshToken,
                         user: {
                             id,
                             name,

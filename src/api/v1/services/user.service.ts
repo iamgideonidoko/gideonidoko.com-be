@@ -2,12 +2,12 @@ import createError from 'http-errors';
 import User from '../models/user.model';
 import { NewUser, RegisterReturn } from '../interfaces/user.interface';
 import { hashPassword } from '../helpers/password.helper';
-import { signAccessToken } from '../helpers/jwt.helper';
+import { signAccessToken, signRefreshToken } from '../helpers/jwt.helper';
 
 export const addUserToDb = async (payload: NewUser): Promise<RegisterReturn> => {
     return new Promise<RegisterReturn>(async (resolve, reject) => {
         try {
-            const user = await User.findOne({ email: payload.email });
+            const user = await User.findOne({ $or: [{ email: payload.email }, { username: payload.username }] });
             if (user) {
                 reject(createError(406, 'User already exists'));
             } else {
@@ -28,8 +28,10 @@ export const addUserToDb = async (payload: NewUser): Promise<RegisterReturn> => 
                 const { id, name, username, email, githubusername, created_at } = savedUser;
                 // sign a new access token for the user using their id
                 const accessToken = await signAccessToken({ id });
+                const refreshToken = await signRefreshToken({ id });
                 resolve({
                     accessToken,
+                    refreshToken,
                     user: {
                         id,
                         name,

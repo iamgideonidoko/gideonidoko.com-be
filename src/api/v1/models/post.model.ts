@@ -1,5 +1,6 @@
-import { Schema, model, Model } from 'mongoose';
+import { Schema, model, PaginateModel } from 'mongoose';
 import { IPost } from '../interfaces/post.interface';
+import paginate from 'mongoose-paginate-v2';
 
 // Define Blog Post Schema
 const PostSchema = new Schema<IPost>({
@@ -88,8 +89,10 @@ const PostSchema = new Schema<IPost>({
     description: String,
 });
 
+PostSchema.plugin(paginate);
+
 //create Post model
-const Post: Model<IPost> = model('blogpost', PostSchema);
+const Post = model<IPost, PaginateModel<IPost>>('blogpost', PostSchema);
 
 //export the model
 export default Post;

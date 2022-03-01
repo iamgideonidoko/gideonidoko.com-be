@@ -32,7 +32,7 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 //  limit request payload size
-app.use(express.json({ limit: '10kb' }));
+app.use(express.json({ limit: '1MB' }));
 
 app.use(express.urlencoded({ extended: false }));
 
@@ -72,7 +72,7 @@ app.use(appCors());
 (async () => {
     try {
         await mongoose.connect(constants.mongodbURI);
-        console.log('Mongo yeye');
+        console.log('MongoDB Connected...');
     } catch (err) {
         console.log('MONGODB CONNECTION ERROR: ' + err);
     }
