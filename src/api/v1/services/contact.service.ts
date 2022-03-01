@@ -1,6 +1,30 @@
 import { NewContact, IContact } from '../interfaces/contact.interface';
 import Contact from '../models/contact.model';
 import createError from 'http-errors';
+import { PaginateOptions, PaginateResult } from 'mongoose';
+
+export const fetchPaginatedContacts = (
+    page: number,
+    perPage: number,
+): Promise<PaginateResult<IContact & { _id: string }>> => {
+    return new Promise<PaginateResult<IContact & { _id: string }>>(async (resolve, reject) => {
+        const paginationOptions: PaginateOptions = {
+            sort: { created_at: -1 },
+            page,
+            limit: perPage,
+            customLabels: {
+                limit: 'perPage',
+            },
+        };
+
+        try {
+            const paginatedContacts = await Contact.paginate({}, paginationOptions);
+            resolve(paginatedContacts);
+        } catch (err) {
+            reject(err);
+        }
+    });
+};
 
 export const saveContactToDb = (contact: NewContact): Promise<IContact & { _id: string }> => {
     return new Promise<IContact & { _id: string }>(async (resolve, reject) => {

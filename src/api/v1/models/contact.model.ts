@@ -1,5 +1,6 @@
-import { Schema, model, Model } from 'mongoose';
+import { Schema, model, PaginateModel } from 'mongoose';
 import { IContact } from '../interfaces/contact.interface';
+import paginate from 'mongoose-paginate-v2';
 
 // Define Contact Schema
 const ContactSchema = new Schema<IContact>({
@@ -25,8 +26,10 @@ const ContactSchema = new Schema<IContact>({
     },
 });
 
+ContactSchema.plugin(paginate);
+
 //create Contact model
-const Contact: Model<IContact> = model('contact', ContactSchema);
+const Contact = model<IContact, PaginateModel<IContact>>('contact', ContactSchema);
 
 //export the model
 export default Contact;

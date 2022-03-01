@@ -1,5 +1,6 @@
-import { Schema, model, Model } from 'mongoose';
+import { Schema, model, PaginateModel } from 'mongoose';
 import { IAsset } from '../interfaces/asset.interface';
+import paginate from 'mongoose-paginate-v2';
 
 // Define Blog Post Schema
 const AssetSchema = new Schema<IAsset>({
@@ -30,8 +31,10 @@ const AssetSchema = new Schema<IAsset>({
     },
 });
 
+AssetSchema.plugin(paginate);
+
 //create Asset model
-const Asset: Model<IAsset> = model('asset', AssetSchema);
+const Asset = model<IAsset, PaginateModel<IAsset>>('asset', AssetSchema);
 
 //export the model
 export default Asset;

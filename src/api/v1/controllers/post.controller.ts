@@ -50,7 +50,7 @@ export const getSearchedPosts = async (req: Request, res: Response, next: NextFu
     try {
         // const posts = await Post.find().sort({ created_at: -1 }); // get all posts sorted by creation time
         const posts = await fetchSearchedPosts(query); // get all posts sorted by creation time
-        return createSuccess(res, 200, 'Posts fetched successfully', { posts });
+        return createSuccess(res, 200, 'Posts searched & fetched successfully', { posts });
     } catch (err) {
         return next(err);
     }

@@ -1,6 +1,30 @@
 import { IAsset, NewAsset } from '../interfaces/asset.interface';
 import Asset from '../models/asset.model';
 import createError from 'http-errors';
+import { PaginateOptions, PaginateResult } from 'mongoose';
+
+export const fetchPaginatedAssets = (
+    page: number,
+    perPage: number,
+): Promise<PaginateResult<IAsset & { _id: string }>> => {
+    return new Promise<PaginateResult<IAsset & { _id: string }>>(async (resolve, reject) => {
+        const paginationOptions: PaginateOptions = {
+            sort: { created_at: -1 },
+            page,
+            limit: perPage,
+            customLabels: {
+                limit: 'perPage',
+            },
+        };
+
+        try {
+            const paginatedAssets = await Asset.paginate({}, paginationOptions);
+            resolve(paginatedAssets);
+        } catch (err) {
+            reject(err);
+        }
+    });
+};
 
 export const saveAssetToDb = (asset: NewAsset): Promise<IAsset & { _id: string }> => {
     return new Promise<IAsset & { _id: string }>(async (resolve, reject) => {

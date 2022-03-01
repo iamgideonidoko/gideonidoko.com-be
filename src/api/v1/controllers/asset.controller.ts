@@ -2,8 +2,7 @@ import { saveAssetToDb } from './../services/asset.service';
 import { Request, Response, NextFunction } from 'express';
 import createError from 'http-errors';
 import { createSuccess } from '../helpers/http.helper';
-import { checkIfAssetExists, removeAssetFromDb } from '../services/asset.service';
-import Asset from '../models/asset.model';
+import { checkIfAssetExists, removeAssetFromDb, fetchPaginatedAssets } from '../services/asset.service';
 
 export const addAsset = async (req: Request, res: Response, next: NextFunction) => {
     const { name, url, size, file_type, author_username, author_name } = req.body;
@@ -23,8 +22,10 @@ export const addAsset = async (req: Request, res: Response, next: NextFunction) 
 };
 
 export const getAssets = async (req: Request, res: Response, next: NextFunction) => {
+    const perPage = Number(req.query?.per_page) || 10;
+    const page = Number(req.query?.page) || 1;
     try {
-        const assets = await Asset.find().sort({ created_at: -1 });
+        const assets = await fetchPaginatedAssets(page, perPage);
         return createSuccess(res, 200, 'Assets fetched successfully', { assets });
     } catch (err) {
         return next(err);

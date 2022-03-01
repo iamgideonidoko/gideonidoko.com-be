@@ -12,6 +12,7 @@ export const fetchPaginatedPosts = (
     return new Promise<PaginateResult<IPost & { _id: string }>>(async (resolve, reject) => {
         const paginationOptions: PaginateOptions = {
             select: '-body -comments',
+            sort: { created_at: -1 },
             page,
             limit: perPage,
             customLabels: {
@@ -35,6 +36,7 @@ export const fetchPaginatedPostsComments = (
     return new Promise<PaginateResult<IPost & { _id: string }>>(async (resolve, reject) => {
         const paginationOptions: PaginateOptions = {
             select: '_id title slug comments',
+            sort: { created_at: -1 },
             page,
             limit: perPage,
             customLabels: {
