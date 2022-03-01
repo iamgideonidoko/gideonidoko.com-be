@@ -1,0 +1,83 @@
+###
+POST http://localhost:5000/api/v1/user/register
+Content-Type: application/json; charset=utf-8
+
+{
+    "name": "Paul Ken",
+    "username": "paulken",
+    "email": "paul@ken.com",
+    "password": "paul",
+    "retype_password": "paul",
+    "githubusername": "IamGideonIdoko"
+}
+
+### LOGIN USER
+POST http://localhost:5000/api/v1/auth/login
+Content-Type: application/json; charset=utf-8
+
+{
+    "username": "paulken",
+    "password": "paul"
+}
+
+### GET STUFF
+GET http://localhost:5000/api/v1/posts/javascript
+Content-Type: application/json; charset=utf-8
+
+### SEARCH STUFF
+GET http://localhost:5000/api/v1/assets/search?q=re
+Content-Type: application/json; charset=utf-8
+
+
+
+### POST STUFF
+POST http://localhost:5000/api/v1/post
+Content-Type: application/json; charset=utf-8
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMWNlYWY4OGVjN2IyNjBiZTAyYmY0MiIsImlhdCI6MTY0NjA5NDI2OCwiZXhwIjoxNjQ2MTEyMjY4fQ.lkntI5OE4afdLy-VcTjXTpwQUeQjrpVY7m9qAotXEaQ
+
+{
+    "tags": [
+        "javascript",
+        "trick",
+        "programming-trick",
+        "testing-tag"
+    ],
+    "is_published": true,
+    "is_pinned": false,
+    "keywords": [
+        "JavaScript",
+        "Programming Tips",
+        "tricks"
+    ],
+    "title": "Love of the father",
+    "slug": "love-of-the-father",
+    "cover_img": "https://firebasestorage.googleapis.com/v0/b/gideonidoko-website-assets.appspot.com/o/JavaScript_The-strange-yet-tricky-parts_gideonidoko.com_2fc2c4bd83.jpg?alt=media&token=8626a0e6-bc21-40b6-af21-7ccdc9952733",
+    "author_username": "IamGideonIfexIdoko",
+    "author_name": "Gideon Idoko",
+    "body": "This is the body of my Post"
+}
+
+### UPDATE STUFF
+PUT http://localhost:5000/api/v1/post/621d72e0442229f3214154d2/comments
+Content-Type: application/json; charset=utf-8
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMWNlYWY4OGVjN2IyNjBiZTAyYmY0MiIsImlhdCI6MTY0NjA5NDI2OCwiZXhwIjoxNjQ2MTEyMjY4fQ.lkntI5OE4afdLy-VcTjXTpwQUeQjrpVY7m9qAotXEaQ
+
+{
+    "comments": {
+        "comment_author": "IamGideonIfexIdoko",
+        "comment_body": "This is a lovely post.",
+        "isAdmin": true,
+        "isPostAuthor": true
+    },
+    "commentsUpdateAccessKey": "ce0bd5bb-4e12-4ef6-891c-d6956d265542"
+}
+
+### DELETE STUFF
+DELETE http://localhost:5000/api/v1/post/621d69972750f3ac02f4489e
+Content-Type: application/json; charset=utf-8
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMWNlYWY4OGVjN2IyNjBiZTAyYmY0MiIsImlhdCI6MTY0NjA5NDI2OCwiZXhwIjoxNjQ2MTEyMjY4fQ.lkntI5OE4afdLy-VcTjXTpwQUeQjrpVY7m9qAotXEaQ
+
+{
+    "username": "paulken",
+    "password": "paul"
+}
