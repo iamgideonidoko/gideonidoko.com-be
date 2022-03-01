@@ -5,6 +5,7 @@ import {
     updatePost,
     updatePostComments,
     getPostsComments,
+    getSearchedPosts,
 } from './../controllers/post.controller';
 import { Router } from 'express';
 import validateDto from '../middlewares/validateDto.middleware';
@@ -20,6 +21,13 @@ const postRoute = Router();
 @access 		Public
 */
 postRoute.get('/posts', getPosts);
+
+/*
+@route 			GET /api/v1/posts/search
+@description 	Get all available blog posts
+@access 		Public
+*/
+postRoute.get('/posts/search', getSearchedPosts);
 
 /*
 @route 			GET /api/v1/posts/comments

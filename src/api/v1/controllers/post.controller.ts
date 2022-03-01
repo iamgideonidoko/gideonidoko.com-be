@@ -11,6 +11,7 @@ import {
     removePostFromDb,
     fetchPaginatedPosts,
     fetchPaginatedPostsComments,
+    fetchSearchedPosts,
 } from '../services/post.service';
 import { strToSlug } from '../helpers/post.helper';
 import constants from '../../../config/constants.config';
@@ -35,6 +36,20 @@ export const getPostsComments = async (req: Request, res: Response, next: NextFu
     try {
         // const posts = await Post.find().sort({ created_at: -1 }); // get all posts sorted by creation time
         const posts = await fetchPaginatedPostsComments(page, perPage); // get all posts sorted by creation time
+        return createSuccess(res, 200, 'Posts fetched successfully', { posts });
+    } catch (err) {
+        return next(err);
+    }
+};
+
+export const getSearchedPosts = async (req: Request, res: Response, next: NextFunction) => {
+    const query = req.query?.q?.toString();
+    if (!query) return next(new createError.NotFound('No query found.'));
+    if (query.length < 2) return next(new createError.BadRequest('Query should be at least 2 characters long'));
+
+    try {
+        // const posts = await Post.find().sort({ created_at: -1 }); // get all posts sorted by creation time
+        const posts = await fetchSearchedPosts(query); // get all posts sorted by creation time
         return createSuccess(res, 200, 'Posts fetched successfully', { posts });
     } catch (err) {
         return next(err);

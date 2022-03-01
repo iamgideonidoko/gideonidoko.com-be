@@ -24,6 +24,11 @@ Content-Type: application/json; charset=utf-8
 GET http://localhost:5000/api/v1/posts/comments?per_page=2&page=1
 Content-Type: application/json; charset=utf-8
 
+### SEARCH STUFF
+GET http://localhost:5000/api/v1/posts/search?q=reflect 
+Content-Type: application/json; charset=utf-8
+
+
 
 ### POST STUFF
 POST http://localhost:5000/api/v1/post

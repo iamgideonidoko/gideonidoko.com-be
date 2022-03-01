@@ -51,6 +51,23 @@ export const fetchPaginatedPostsComments = (
     });
 };
 
+export const fetchSearchedPosts = (query: string): Promise<unknown> => {
+    return new Promise<unknown>(async (resolve, reject) => {
+        try {
+            // strip special characters
+            query = query.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g, '');
+            const searchedPosts = await Post.find({
+                $or: [{ title: { $regex: query, $options: 'i' } }, { description: { $regex: query, $options: 'i' } }],
+            })
+                .select('-body -comments')
+                .limit(10);
+            resolve(searchedPosts);
+        } catch (err) {
+            reject(err);
+        }
+    });
+};
+
 export const fetchPostBySlug = (slug: string): Promise<IPost & { _id: string }> => {
     return new Promise<IPost & { _id: string }>(async (resolve, reject) => {
         try {
