@@ -4,6 +4,7 @@ import {
     deletePost,
     updatePost,
     updatePostComments,
+    getPostsComments,
 } from './../controllers/post.controller';
 import { Router } from 'express';
 import validateDto from '../middlewares/validateDto.middleware';
@@ -19,6 +20,13 @@ const postRoute = Router();
 @access 		Public
 */
 postRoute.get('/posts', getPosts);
+
+/*
+@route 			GET /api/v1/posts/comments
+@description 	Get all available blog posts comments
+@access 		Public
+*/
+postRoute.get('/posts/comments', getPostsComments);
 
 /*
 @route 			GET api/v1/post/:slug

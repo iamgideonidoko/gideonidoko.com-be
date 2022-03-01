@@ -10,6 +10,7 @@ import {
     savePostToDb,
     removePostFromDb,
     fetchPaginatedPosts,
+    fetchPaginatedPostsComments,
 } from '../services/post.service';
 import { strToSlug } from '../helpers/post.helper';
 import constants from '../../../config/constants.config';
@@ -21,6 +22,19 @@ export const getPosts = async (req: Request, res: Response, next: NextFunction) 
     try {
         // const posts = await Post.find().sort({ created_at: -1 }); // get all posts sorted by creation time
         const posts = await fetchPaginatedPosts(page, perPage); // get all posts sorted by creation time
+        return createSuccess(res, 200, 'Posts fetched successfully', { posts });
+    } catch (err) {
+        return next(err);
+    }
+};
+
+export const getPostsComments = async (req: Request, res: Response, next: NextFunction) => {
+    const perPage = Number(req.query?.per_page) || 10;
+    const page = Number(req.query?.page) || 1;
+    // return res.json({ status: 'ok' });
+    try {
+        // const posts = await Post.find().sort({ created_at: -1 }); // get all posts sorted by creation time
+        const posts = await fetchPaginatedPostsComments(page, perPage); // get all posts sorted by creation time
         return createSuccess(res, 200, 'Posts fetched successfully', { posts });
     } catch (err) {
         return next(err);

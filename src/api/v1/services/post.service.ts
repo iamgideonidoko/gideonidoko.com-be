@@ -28,6 +28,29 @@ export const fetchPaginatedPosts = (
     });
 };
 
+export const fetchPaginatedPostsComments = (
+    page: number,
+    perPage: number,
+): Promise<PaginateResult<IPost & { _id: string }>> => {
+    return new Promise<PaginateResult<IPost & { _id: string }>>(async (resolve, reject) => {
+        const paginationOptions: PaginateOptions = {
+            select: '_id title slug comments',
+            page,
+            limit: perPage,
+            customLabels: {
+                limit: 'perPage',
+            },
+        };
+
+        try {
+            const paginatedPosts = await Post.paginate({}, paginationOptions);
+            resolve(paginatedPosts);
+        } catch (err) {
+            reject(err);
+        }
+    });
+};
+
 export const fetchPostBySlug = (slug: string): Promise<IPost & { _id: string }> => {
     return new Promise<IPost & { _id: string }>(async (resolve, reject) => {
         try {

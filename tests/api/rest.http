@@ -21,7 +21,7 @@ Content-Type: application/json; charset=utf-8
 }
 
 ### GET STUFF
-GET http://localhost:5000/api/v1/posts?per_page=2&page=4
+GET http://localhost:5000/api/v1/posts/comments?per_page=2&page=1
 Content-Type: application/json; charset=utf-8
 
 
