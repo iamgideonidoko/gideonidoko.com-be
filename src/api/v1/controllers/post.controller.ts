@@ -12,6 +12,7 @@ import {
     fetchPaginatedPosts,
     fetchPaginatedPostsComments,
     fetchSearchedPosts,
+    fetchPaginatedPostsByTag,
 } from '../services/post.service';
 import { strToSlug } from '../helpers/post.helper';
 import constants from '../../../config/constants.config';
@@ -63,6 +64,20 @@ export const getPost = async (req: Request, res: Response, next: NextFunction) =
     try {
         const post = await fetchPostBySlug(slug);
         return createSuccess(res, 200, 'Post fetched successfully', { post });
+    } catch (err) {
+        return next(err);
+    }
+};
+
+// Get posts that belong to a given tag
+export const getPostsByTag = async (req: Request, res: Response, next: NextFunction) => {
+    const { tag } = req.params;
+    const perPage = Number(req.query?.per_page) || 10;
+    const page = Number(req.query?.page) || 1;
+    if (!tag) return next(createError(400, 'No tag provided'));
+    try {
+        const posts = await fetchPaginatedPostsByTag(tag, page, perPage);
+        return createSuccess(res, 200, 'Posts fetched successfully', { posts });
     } catch (err) {
         return next(err);
     }

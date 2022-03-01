@@ -83,6 +83,31 @@ export const fetchPostBySlug = (slug: string): Promise<IPost & { _id: string }> 
     });
 };
 
+export const fetchPaginatedPostsByTag = (
+    tag: string,
+    page: number,
+    perPage: number,
+): Promise<PaginateResult<IPost & { _id: string }>> => {
+    return new Promise<PaginateResult<IPost & { _id: string }>>(async (resolve, reject) => {
+        const paginationOptions: PaginateOptions = {
+            select: '-body -comments',
+            sort: { created_at: -1 },
+            page,
+            limit: perPage,
+            customLabels: {
+                limit: 'perPage',
+            },
+        };
+
+        try {
+            const paginatedPosts = await Post.paginate({ tags: tag }, paginationOptions);
+            resolve(paginatedPosts);
+        } catch (err) {
+            reject(err);
+        }
+    });
+};
+
 export const fetchAuthorPostsByUsername = (
     author_username: string,
     page: number,

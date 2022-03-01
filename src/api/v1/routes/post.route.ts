@@ -9,7 +9,7 @@ import {
 } from './../controllers/post.controller';
 import { Router } from 'express';
 import validateDto from '../middlewares/validateDto.middleware';
-import { getPosts, getPost } from '../controllers/post.controller';
+import { getPosts, getPost, getPostsByTag } from '../controllers/post.controller';
 import { newPostAjvValidate } from '../schemas/post.schema';
 import auth from '../middlewares/auth.middleware';
 
@@ -42,6 +42,13 @@ postRoute.get('/posts/comments', getPostsComments);
 @access 		Public
 */
 postRoute.get('/post/:slug', getPost);
+
+/*
+@route 			GET api/v1/posts/:tag
+@description 	Get a blog posts with a certain tag
+@access 		Public
+*/
+postRoute.get('/posts/:tag', getPostsByTag);
 
 /*
 @route 			GET api/post/:author_username
