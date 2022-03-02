@@ -32,7 +32,13 @@ Content-Type: application/json; charset=utf-8
 GET http://localhost:5000/api/v1/assets/search?q=re
 Content-Type: application/json; charset=utf-8
 
+### REFRESH TOKEN
+POST http://localhost:5000/api/v1/auth/refresh
+Content-Type: application/json; charset=utf-8
 
+{
+    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMWNlYWY4OGVjN2IyNjBiZTAyYmY0MiIsImlhdCI6MTY0NjIyNzg3MiwiZXhwIjoxNjQ2MjQ1ODcyfQ.XDTEotHSXSfAhik_dLXCgbnNlwuybZHtIvxBgDasNkY"
+}
 
 ### POST STUFF
 POST http://localhost:5000/api/v1/post

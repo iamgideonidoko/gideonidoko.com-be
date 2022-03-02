@@ -45,14 +45,14 @@ export const getUserFromDb = async (username: string, userPassword: string): Pro
     });
 };
 
-export const getNewTokens = async (refreshToken: string): Promise<{ accessToken: string; refreshToken: string }> => {
+export const getNewTokens = async (refreshToken: string): Promise<{ accessToken: string }> => {
     return new Promise(async (resolve, reject) => {
         try {
             const decoded = await verifyRefreshToken(refreshToken);
-            const accessToken = await signAccessToken(decoded?.id);
-            const refToken = await signRefreshToken(decoded?.id);
-            await addRefreshTokenToCache(refToken);
-            resolve({ accessToken, refreshToken: refToken });
+            const accessToken = await signAccessToken({ id: decoded?.id });
+            // const refToken = await signRefreshToken({ id: decoded?.id });
+            await addRefreshTokenToCache(refreshToken);
+            resolve({ accessToken });
         } catch (err) {
             reject(err);
         }
