@@ -1,6 +1,6 @@
 import ajvInstance from './ajvInstance';
 import { JSONSchemaType } from 'ajv';
-import { NewPost } from '../interfaces/post.interface';
+import { NewPost, NewPostComment, NewPostReply } from '../interfaces/post.interface';
 
 const newPostSchema: JSONSchemaType<NewPost> = {
     type: 'object',
@@ -22,5 +22,38 @@ const newPostSchema: JSONSchemaType<NewPost> = {
     additionalProperties: false,
 };
 
+const singlePostReplySchema: JSONSchemaType<NewPostReply> = {
+    type: 'object',
+    properties: {
+        reply_author: { type: 'string', nullable: false },
+        reply_body: { type: 'string', nullable: false },
+        isAdmin: { type: 'boolean', nullable: true },
+        isPostAuthor: { type: 'boolean', nullable: true },
+    },
+    required: ['reply_author', 'reply_body'],
+    additionalProperties: true,
+};
+
+const singlePostCommentSchema: JSONSchemaType<NewPostComment> = {
+    type: 'object',
+    properties: {
+        comment_author: { type: 'string', nullable: false },
+        comment_body: { type: 'string', nullable: false },
+        isAdmin: { type: 'boolean', nullable: true },
+        isPostAuthor: { type: 'boolean', nullable: true },
+        replies: { type: 'array', nullable: true, items: singlePostReplySchema },
+    },
+    required: ['comment_author', 'comment_body'],
+    additionalProperties: true,
+};
+
+const newPostComments: JSONSchemaType<Array<NewPostComment>> = {
+    type: 'array',
+    nullable: true,
+    items: singlePostCommentSchema,
+};
+
 // export a validate function
 export const newPostAjvValidate = ajvInstance.compile(newPostSchema);
+
+export const newPostCommentsAjvValidate = ajvInstance.compile(newPostComments);

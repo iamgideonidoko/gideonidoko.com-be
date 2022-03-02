@@ -67,12 +67,16 @@ Content-Type: application/json; charset=utf-8
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMWNlYWY4OGVjN2IyNjBiZTAyYmY0MiIsImlhdCI6MTY0NjA5NDI2OCwiZXhwIjoxNjQ2MTEyMjY4fQ.lkntI5OE4afdLy-VcTjXTpwQUeQjrpVY7m9qAotXEaQ
 
 {
-    "comments": {
+    "comments": [{
         "comment_author": "IamGideonIfexIdoko",
         "comment_body": "This are lovely posts.",
         "isAdmin": true,
-        "isPostAuthor": true
-    },
+        "isPostAuthor": true,
+        "replies": [{
+            "reply_author": "IamGideonIfexIdoko",
+            "reply_body": "A sweet reply" 
+        }]
+    }],
     "commentsUpdateAccessKey": "ce0bd5bb-4e12-4ef6-891c-d6956d265542"
 }
 
