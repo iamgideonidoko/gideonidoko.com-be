@@ -21,7 +21,11 @@ Content-Type: application/json; charset=utf-8
 }
 
 ### GET STUFF
-GET http://localhost:5000/api/v1/posts/javascript
+GET http://localhost:5000/api/v1/posts?page=1&per_page=2
+Content-Type: application/json; charset=utf-8
+
+### GET STUFF
+GET http://localhost:5000/api/v1/post/love-of-the-father
 Content-Type: application/json; charset=utf-8
 
 ### SEARCH STUFF
@@ -33,7 +37,7 @@ Content-Type: application/json; charset=utf-8
 ### POST STUFF
 POST http://localhost:5000/api/v1/post
 Content-Type: application/json; charset=utf-8
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMWNlYWY4OGVjN2IyNjBiZTAyYmY0MiIsImlhdCI6MTY0NjA5NDI2OCwiZXhwIjoxNjQ2MTEyMjY4fQ.lkntI5OE4afdLy-VcTjXTpwQUeQjrpVY7m9qAotXEaQ
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMWNlYWY4OGVjN2IyNjBiZTAyYmY0MiIsImlhdCI6MTY0NjIwNDg1MSwiZXhwIjoxNjQ2MjIyODUxfQ.Cuub_9E8jYpF9_liH3VzWrJmXtJtWyesMuMYReBiH_c
 
 {
     "tags": [
@@ -49,8 +53,8 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMWNlYWY4O
         "Programming Tips",
         "tricks"
     ],
-    "title": "Love of the father",
-    "slug": "love-of-the-father",
+    "title": "God of all",
+    "slug": "god-of-all",
     "cover_img": "https://firebasestorage.googleapis.com/v0/b/gideonidoko-website-assets.appspot.com/o/JavaScript_The-strange-yet-tricky-parts_gideonidoko.com_2fc2c4bd83.jpg?alt=media&token=8626a0e6-bc21-40b6-af21-7ccdc9952733",
     "author_username": "IamGideonIfexIdoko",
     "author_name": "Gideon Idoko",
@@ -63,19 +67,23 @@ Content-Type: application/json; charset=utf-8
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMWNlYWY4OGVjN2IyNjBiZTAyYmY0MiIsImlhdCI6MTY0NjA5NDI2OCwiZXhwIjoxNjQ2MTEyMjY4fQ.lkntI5OE4afdLy-VcTjXTpwQUeQjrpVY7m9qAotXEaQ
 
 {
-    "comments": {
+    "comments": [{
         "comment_author": "IamGideonIfexIdoko",
-        "comment_body": "This is a lovely post.",
+        "comment_body": "This are lovely posts.",
         "isAdmin": true,
-        "isPostAuthor": true
-    },
+        "isPostAuthor": true,
+        "replies": [{
+            "reply_author": "IamGideonIfexIdoko",
+            "reply_body": "A sweet reply" 
+        }]
+    }],
     "commentsUpdateAccessKey": "ce0bd5bb-4e12-4ef6-891c-d6956d265542"
 }
 
 ### DELETE STUFF
-DELETE http://localhost:5000/api/v1/post/621d69972750f3ac02f4489e
+DELETE http://localhost:5000/api/v1/post/621f34a47718a4ef1ded73e7
 Content-Type: application/json; charset=utf-8
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMWNlYWY4OGVjN2IyNjBiZTAyYmY0MiIsImlhdCI6MTY0NjA5NDI2OCwiZXhwIjoxNjQ2MTEyMjY4fQ.lkntI5OE4afdLy-VcTjXTpwQUeQjrpVY7m9qAotXEaQ
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMWNlYWY4OGVjN2IyNjBiZTAyYmY0MiIsImlhdCI6MTY0NjIxMjMzMywiZXhwIjoxNjQ2MjMwMzMzfQ.eHWoIhHTSIUe2C033m1RQi74GJqMogjwLpz-uE6uBWI
 
 {
     "username": "paulken",

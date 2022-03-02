@@ -50,3 +50,33 @@ export interface NewPost {
     keywords?: string[];
     description: string;
 }
+
+export type NewPostReply = {
+    reply_author: string;
+    reply_body: string;
+    isAdmin?: boolean;
+    isPostAuthor?: boolean;
+};
+
+export type NewPostComment = {
+    comment_author: string;
+    comment_body: string;
+    isAdmin?: boolean;
+    isPostAuthor?: boolean;
+    replies?: Array<NewPostReply>;
+};
+
+export interface PostUpdate {
+    title?: string;
+    slug?: string;
+    cover_img?: string;
+    author_username?: string;
+    author_name?: string;
+    body?: string;
+    tags?: string[];
+    is_published?: boolean;
+    is_pinned?: boolean;
+    is_comment_disabled?: boolean;
+    keywords?: string[];
+    description?: string;
+}

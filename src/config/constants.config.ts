@@ -14,6 +14,10 @@ type Constants = {
     accessTokenSpan: number | string;
     refreshTokenSpan: number | string;
     v1Base: string;
+    redisPassword: string;
+    redisUsername: string;
+    redisKeySpan: number;
+    refreshTokensRedisKey: string;
 };
 
 const constants: Constants = {
@@ -26,6 +30,10 @@ const constants: Constants = {
     accessTokenSpan: '5h',
     refreshTokenSpan: '1y',
     v1Base: '/api/v1',
+    redisPassword: process.env.REDIS_PASSWORD as string,
+    redisUsername: process.env.REDIS_USERNAME as string,
+    redisKeySpan: 60 * 60 * 24 * 2, // 2 days
+    refreshTokensRedisKey: 'refreshTokens',
 };
 
 export default constants;

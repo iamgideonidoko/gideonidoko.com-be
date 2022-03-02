@@ -11,15 +11,13 @@ import limiter from './config/rateLimiter.config';
 import appCors from './config/cors.config';
 import mongoose from 'mongoose';
 import constants from './config/constants.config';
-import client from './config/redis.config';
+import redisClient from './config/redis.config';
 // Routes Import
 import userRoute from './api/v1/routes/user.route';
 import authRoute from './api/v1/routes/auth.route';
 import postRoute from './api/v1/routes/post.route';
 import assetRoute from './api/v1/routes/asset.route';
 import contactRoute from './api/v1/routes/contact.route';
-
-// console.log('Client => ', client);
 
 config();
 
@@ -60,7 +58,8 @@ app.use(appCors());
 (async () => {
     // connect to redis
     try {
-        await client.connect();
+        await redisClient.connect();
+        await redisClient.auth({ username: constants.redisUsername, password: constants.redisPassword });
     } catch (err) {
         console.log('REDIS CONNECTION ERROR: ', err);
     }
