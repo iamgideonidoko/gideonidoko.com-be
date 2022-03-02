@@ -4,6 +4,7 @@ import { delRefreshToken, getNewTokens, getUserFromDb } from '../services/auth.s
 import { createSuccess } from '../helpers/http.helper';
 import User from '../models/user.model';
 import { LoggedInUserRequest } from '../interfaces/auth.interface';
+import { validateRefreshToken } from '../helpers/redis.helper';
 
 export const loginUser = async (req: Request, res: Response, next: NextFunction) => {
     const { username, password } = req.body;
@@ -33,6 +34,8 @@ export const refreshUserToken = async (req: Request, res: Response, next: NextFu
     }
 
     try {
+        const isValid = validateRefreshToken(refreshToken);
+        if (!isValid) return next(new createError.Unauthorized());
         const tokens = await getNewTokens(refreshToken);
         if (tokens) {
             return createSuccess(res, 200, 'Token refreshed successfully', tokens);
