@@ -53,8 +53,8 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMWNlYWY4O
         "Programming Tips",
         "tricks"
     ],
-    "title": "Brethren believers",
-    "slug": "brethren-believers",
+    "title": "God of all",
+    "slug": "god-of-all",
     "cover_img": "https://firebasestorage.googleapis.com/v0/b/gideonidoko-website-assets.appspot.com/o/JavaScript_The-strange-yet-tricky-parts_gideonidoko.com_2fc2c4bd83.jpg?alt=media&token=8626a0e6-bc21-40b6-af21-7ccdc9952733",
     "author_username": "IamGideonIfexIdoko",
     "author_name": "Gideon Idoko",
@@ -81,9 +81,9 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMWNlYWY4O
 }
 
 ### DELETE STUFF
-DELETE http://localhost:5000/api/v1/post/621d69972750f3ac02f4489e
+DELETE http://localhost:5000/api/v1/post/621f34a47718a4ef1ded73e7
 Content-Type: application/json; charset=utf-8
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMWNlYWY4OGVjN2IyNjBiZTAyYmY0MiIsImlhdCI6MTY0NjA5NDI2OCwiZXhwIjoxNjQ2MTEyMjY4fQ.lkntI5OE4afdLy-VcTjXTpwQUeQjrpVY7m9qAotXEaQ
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMWNlYWY4OGVjN2IyNjBiZTAyYmY0MiIsImlhdCI6MTY0NjIxMjMzMywiZXhwIjoxNjQ2MjMwMzMzfQ.eHWoIhHTSIUe2C033m1RQi74GJqMogjwLpz-uE6uBWI
 
 {
     "username": "paulken",

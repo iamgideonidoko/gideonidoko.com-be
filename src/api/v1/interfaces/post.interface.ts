@@ -65,3 +65,18 @@ export type NewPostComment = {
     isPostAuthor?: boolean;
     replies?: Array<NewPostReply>;
 };
+
+export interface PostUpdate {
+    title?: string;
+    slug?: string;
+    cover_img?: string;
+    author_username?: string;
+    author_name?: string;
+    body?: string;
+    tags?: string[];
+    is_published?: boolean;
+    is_pinned?: boolean;
+    is_comment_disabled?: boolean;
+    keywords?: string[];
+    description?: string;
+}

@@ -5,6 +5,8 @@ import User from '../models/user.model';
 import { IUser } from '../interfaces/user.interface';
 import { PaginateOptions, PaginateResult } from 'mongoose';
 import redisClient from '../../../config/redis.config';
+import constants from '../../../config/constants.config';
+import { flushRedis } from '../helpers/redis.helper';
 
 export const fetchPaginatedPosts = (
     page: number,
@@ -23,13 +25,21 @@ export const fetchPaginatedPosts = (
         const redisKey = `getPosts?page=${page}&per_page=${perPage}`;
 
         try {
-            const redisValue = await redisClient.get(redisKey);
-            if (redisValue) resolve(JSON.parse(redisValue));
+            try {
+                const redisValue = await redisClient.get(redisKey);
+                if (redisValue) resolve(JSON.parse(redisValue));
+            } catch (err) {
+                console.log('Redis Error => ', err);
+            }
             const paginatedPosts = await Post.paginate({}, paginationOptions);
-            await redisClient.set(redisKey, JSON.stringify(paginatedPosts), {
-                EX: 60 * 60 * 24, // expires in a day
-                NX: true,
-            });
+            try {
+                await redisClient.set(redisKey, JSON.stringify(paginatedPosts), {
+                    EX: constants.redisKeySpan,
+                    NX: true,
+                });
+            } catch (err) {
+                console.log('Redis Error => ', err);
+            }
             resolve(paginatedPosts);
         } catch (err) {
             reject(err);
@@ -55,13 +65,21 @@ export const fetchPaginatedPostsComments = (
         const redisKey = `getPostsComments?page=${page}&per_page=${perPage}`;
 
         try {
-            const redisValue = await redisClient.get(redisKey);
-            if (redisValue) resolve(JSON.parse(redisValue));
+            try {
+                const redisValue = await redisClient.get(redisKey);
+                if (redisValue) resolve(JSON.parse(redisValue));
+            } catch (err) {
+                console.log('Redis Error => ', err);
+            }
             const paginatedPosts = await Post.paginate({}, paginationOptions);
-            await redisClient.set(redisKey, JSON.stringify(paginatedPosts), {
-                EX: 60 * 60 * 24, // expires in a day
-                NX: true,
-            });
+            try {
+                await redisClient.set(redisKey, JSON.stringify(paginatedPosts), {
+                    EX: constants.redisKeySpan,
+                    NX: true,
+                });
+            } catch (err) {
+                console.log('Redis Error => ', err);
+            }
             resolve(paginatedPosts);
         } catch (err) {
             reject(err);
@@ -91,14 +109,22 @@ export const fetchPostBySlug = (slug: string): Promise<IPost & { _id: string }> 
     return new Promise<IPost & { _id: string }>(async (resolve, reject) => {
         const redisKey = `getPost/${slug}`;
         try {
-            const redisValue = await redisClient.get(redisKey);
-            if (redisValue) resolve(JSON.parse(redisValue));
+            try {
+                const redisValue = await redisClient.get(redisKey);
+                if (redisValue) resolve(JSON.parse(redisValue));
+            } catch (err) {
+                console.log('Redis Error => ', err);
+            }
             const post = await Post.findOne({ slug });
             if (!post) reject(new createError.NotFound(`Post does not exist.`));
-            await redisClient.set(redisKey, JSON.stringify(post), {
-                EX: 60 * 60 * 24, // expires in a day
-                NX: true,
-            });
+            try {
+                await redisClient.set(redisKey, JSON.stringify(post), {
+                    EX: constants.redisKeySpan,
+                    NX: true,
+                });
+            } catch (err) {
+                console.log('Redis Error => ', err);
+            }
             resolve(post as IPost & { _id: string });
         } catch (err) {
             reject(err);
@@ -125,13 +151,21 @@ export const fetchPaginatedPostsByTag = (
         const redisKey = `getPostsByTag/${tag}?page=${page}&per_page=${perPage}`;
 
         try {
-            const redisValue = await redisClient.get(redisKey);
-            if (redisValue) resolve(JSON.parse(redisValue));
+            try {
+                const redisValue = await redisClient.get(redisKey);
+                if (redisValue) resolve(JSON.parse(redisValue));
+            } catch (err) {
+                console.log('Redis Error => ', err);
+            }
             const paginatedPosts = await Post.paginate({ tags: tag }, paginationOptions);
-            await redisClient.set(redisKey, JSON.stringify(paginatedPosts), {
-                EX: 60 * 60 * 24, // expires in a day
-                NX: true,
-            });
+            try {
+                await redisClient.set(redisKey, JSON.stringify(paginatedPosts), {
+                    EX: constants.redisKeySpan,
+                    NX: true,
+                });
+            } catch (err) {
+                console.log('Redis Error => ', err);
+            }
             resolve(paginatedPosts);
         } catch (err) {
             reject(err);
@@ -193,7 +227,7 @@ export const savePostToDb = (post: NewPost): Promise<IPost & { _id: string }> =>
         try {
             const newPost = new Post(post);
             const savedPost = await newPost.save();
-            await redisClient.flushDb();
+            await flushRedis();
             resolve(savedPost);
         } catch (err) {
             reject(err);
@@ -207,7 +241,7 @@ export const removePostFromDb = (postId: string): Promise<boolean> => {
             const post = await Post.findById(postId);
             if (post) {
                 await post.remove();
-                await redisClient.flushDb();
+                await flushRedis();
                 resolve(true);
             } else {
                 reject(new createError.NotFound('Post with id could not be found'));
@@ -222,7 +256,7 @@ export const updatePostInDb = (id: string, newUpdate: object): Promise<IPost & {
     return new Promise<IPost & { _id: string }>(async (resolve, reject) => {
         try {
             const post = await Post.findByIdAndUpdate(id, newUpdate, { new: true });
-            await redisClient.flushDb();
+            await flushRedis();
             resolve(post as IPost & { _id: string });
         } catch (err) {
             reject(err);

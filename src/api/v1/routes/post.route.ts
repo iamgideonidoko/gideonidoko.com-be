@@ -10,7 +10,7 @@ import {
 import { Router } from 'express';
 import validateDto from '../middlewares/validateDto.middleware';
 import { getPosts, getPost, getPostsByTag } from '../controllers/post.controller';
-import { newPostAjvValidate } from '../schemas/post.schema';
+import { newPostAjvValidate, updatePostAjvValidate } from '../schemas/post.schema';
 import auth from '../middlewares/auth.middleware';
 
 const postRoute = Router();
@@ -76,7 +76,7 @@ postRoute.delete('/post/:id', auth, deletePost);
 @description 	update a single blog post with given id
 @access 		Private (auth needed)
 */
-postRoute.put('/post/:id', auth, updatePost);
+postRoute.put('/post/:id', [auth, validateDto(updatePostAjvValidate)], updatePost);
 
 /*
 @route 			PUT api/v1/post/:id/comments
