@@ -21,6 +21,7 @@ export const getPosts = async (req: Request, res: Response, next: NextFunction) 
     const perPage = Number(req.query?.per_page) || 10;
     const page = Number(req.query?.page) || 1;
     // return res.json({ status: 'ok' });
+    console.log('Route => ', req.originalUrl);
     try {
         // const posts = await Post.find().sort({ created_at: -1 }); // get all posts sorted by creation time
         const posts = await fetchPaginatedPosts(page, perPage); // get all posts sorted by creation time
