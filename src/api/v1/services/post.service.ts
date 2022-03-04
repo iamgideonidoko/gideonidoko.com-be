@@ -31,7 +31,7 @@ export const fetchPaginatedPosts = (
             } catch (err) {
                 console.log('Redis Error => ', err);
             }
-            const paginatedPosts = await Post.paginate({}, paginationOptions);
+            const paginatedPosts = await Post.paginate({ is_published: true }, paginationOptions);
             try {
                 await redisClient.set(redisKey, JSON.stringify(paginatedPosts), {
                     EX: constants.redisKeySpan,

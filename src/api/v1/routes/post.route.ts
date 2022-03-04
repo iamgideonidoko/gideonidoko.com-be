@@ -9,7 +9,7 @@ import {
 } from './../controllers/post.controller';
 import { Router } from 'express';
 import validateDto from '../middlewares/validateDto.middleware';
-import { getPosts, getPost, getPostsByTag } from '../controllers/post.controller';
+import { getPosts, getPinnedPosts, getPost, getPostsByTag } from '../controllers/post.controller';
 import { newPostAjvValidate, updatePostAjvValidate } from '../schemas/post.schema';
 import auth from '../middlewares/auth.middleware';
 
@@ -21,6 +21,13 @@ const postRoute = Router();
 @access 		Public
 */
 postRoute.get('/posts', getPosts);
+
+/*
+@route 			GET /api/v1/posts
+@description 	Get all available blog posts that are pinned
+@access 		Public
+*/
+postRoute.get('/posts/pinned', getPinnedPosts);
 
 /*
 @route 			GET /api/v1/posts/search?q=term

@@ -37,7 +37,7 @@ POST http://localhost:5000/api/v1/auth/refresh
 Content-Type: application/json; charset=utf-8
 
 {
-    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMWNlYWY4OGVjN2IyNjBiZTAyYmY0MiIsImlhdCI6MTY0NjIyNzg3MiwiZXhwIjoxNjQ2MjQ1ODcyfQ.XDTEotHSXSfAhik_dLXCgbnNlwuybZHtIvxBgDasNkY"
+    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMWNlYWY4OGVjN2IyNjBiZTAyYmY0MiIsImlhdCI6MTY0NjIzNDIzNywiZXhwIjoxNjQ2MjUyMjM3fQ.op5ECnJJe3xaJD6VvADcXwc_sES7hBLFP3zlkqQ40Ug"
 }
 
 ### POST STUFF
