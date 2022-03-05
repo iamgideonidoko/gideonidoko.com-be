@@ -50,7 +50,7 @@ export const addRefreshTokenToCache = (refreshToken: string): Promise<void> => {
                 const refreshTokenArr: string[] = removeExpiredRefreshTokens(JSON.parse(refreshTokens));
                 if (refreshTokenArr.indexOf(refreshToken) !== -1) {
                     // token exists in redis cache so overwrite
-                    await redisClient.set(constants.refreshTokensRedisKey, JSON.stringify(refreshToken), {
+                    await redisClient.set(constants.refreshTokensRedisKey, JSON.stringify(refreshTokenArr), {
                         XX: true,
                     });
                 } else {

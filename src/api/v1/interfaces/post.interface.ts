@@ -80,3 +80,9 @@ export interface PostUpdate {
     keywords?: string[];
     description?: string;
 }
+
+export interface SinglePostReturn {
+    post: IPost & { _id: string };
+    previousPost: Array<IPost & { _id: string }>;
+    nextPost: Array<IPost & { _id: string }>;
+}
