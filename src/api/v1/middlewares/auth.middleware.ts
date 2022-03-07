@@ -28,7 +28,7 @@ const auth = (req: AuthReq, _res: Response, next: NextFunction): void => {
 
         next();
     } catch (e) {
-        return next(createError('Auth token is invalid or not provided'));
+        return next(createError(401, 'Auth token is invalid or not provided'));
     }
 };
 
