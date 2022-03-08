@@ -3,7 +3,6 @@ import User from '../models/user.model';
 import { RegisterReturn } from '../interfaces/user.interface';
 import { validatePassword } from '../helpers/password.helper';
 import { signAccessToken, verifyRefreshToken, signRefreshToken } from '../helpers/jwt.helper';
-import client from '../../../config/redis.config';
 import { addRefreshTokenToCache } from '../helpers/redis.helper';
 
 export const getUserFromDb = async (username: string, userPassword: string): Promise<RegisterReturn> => {
@@ -21,7 +20,6 @@ export const getUserFromDb = async (username: string, userPassword: string): Pro
                 if (match) {
                     const accessToken = await signAccessToken({ id });
                     const refreshToken = await signRefreshToken({ id });
-                    console.log('Passed refresh token => ', refreshToken);
                     await addRefreshTokenToCache(refreshToken);
                     resolve({
                         accessToken,
@@ -45,26 +43,15 @@ export const getUserFromDb = async (username: string, userPassword: string): Pro
     });
 };
 
-export const getNewTokens = async (refreshToken: string): Promise<{ accessToken: string }> => {
-    return new Promise(async (resolve, reject) => {
+export const getNewTokens = async (refreshToken: string): Promise<{ accessToken: string; refreshToken: string }> => {
+    return new Promise<{ accessToken: string; refreshToken: string }>(async (resolve, reject) => {
         try {
+            // verify the refresh token to get the id of user
             const decoded = await verifyRefreshToken(refreshToken);
             const accessToken = await signAccessToken({ id: decoded?.id });
-            // const refToken = await signRefreshToken({ id: decoded?.id });
-            await addRefreshTokenToCache(refreshToken);
-            resolve({ accessToken });
-        } catch (err) {
-            reject(err);
-        }
-    });
-};
-
-export const delRefreshToken = async (refreshToken: string): Promise<number> => {
-    return new Promise<number>(async (resolve, reject) => {
-        try {
-            const decoded = await verifyRefreshToken(refreshToken);
-            const value = await client.del(decoded?.id);
-            resolve(value);
+            const refToken = await signRefreshToken({ id: decoded?.id });
+            await addRefreshTokenToCache(refToken);
+            resolve({ accessToken, refreshToken: refToken });
         } catch (err) {
             reject(err);
         }

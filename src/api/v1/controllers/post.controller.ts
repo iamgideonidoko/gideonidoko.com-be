@@ -156,7 +156,7 @@ export const createPost = async (req: Request, res: Response, next: NextFunction
             description: description ? description : '',
         };
         const savedPost = await savePostToDb(newPost);
-        return createSuccess(res, 200, 'User registered successfully', { post: savedPost });
+        return createSuccess(res, 200, 'Post created successfully', { post: savedPost });
     } catch (err) {
         return next(err);
     }
