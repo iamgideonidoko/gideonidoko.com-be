@@ -12,6 +12,7 @@ import validateDto from '../middlewares/validateDto.middleware';
 import { getPosts, getPinnedPosts, getPost, getPostsByTag } from '../controllers/post.controller';
 import { newPostAjvValidate, updatePostAjvValidate } from '../schemas/post.schema';
 import auth from '../middlewares/auth.middleware';
+import noauth from '../middlewares/noauth.middelware';
 
 const postRoute = Router();
 
@@ -20,49 +21,49 @@ const postRoute = Router();
 @description 	Get all available blog posts
 @access 		Public
 */
-postRoute.get('/posts', getPosts);
+postRoute.get('/posts', noauth, getPosts);
 
 /*
 @route 			GET /api/v1/posts
 @description 	Get all available blog posts that are pinned
 @access 		Public
 */
-postRoute.get('/posts/pinned', getPinnedPosts);
+postRoute.get('/posts/pinned', noauth, getPinnedPosts);
 
 /*
 @route 			GET /api/v1/posts/search?q=term
 @description 	Search through blog posts
 @access 		Public
 */
-postRoute.get('/posts/search', getSearchedPosts);
+postRoute.get('/posts/search', noauth, getSearchedPosts);
 
 /*
 @route 			GET /api/v1/posts/comments
 @description 	Get all available blog posts comments
 @access 		Public
 */
-postRoute.get('/posts/comments', getPostsComments);
+postRoute.get('/posts/comments', noauth, getPostsComments);
 
 /*
 @route 			GET api/v1/post/:slug
 @description 	Get a single blog post with given slug
 @access 		Public
 */
-postRoute.get('/post/:slug', getPost);
+postRoute.get('/post/:slug', noauth, getPost);
 
 /*
 @route 			GET api/v1/posts/:tag
 @description 	Get a blog posts with a certain tag
 @access 		Public
 */
-postRoute.get('/posts/:tag', getPostsByTag);
+postRoute.get('/posts/:tag', noauth, getPostsByTag);
 
 /*
 @route 			GET api/post/:author_username
 @description 	Get posts by an author
 @access 		Public
 */
-postRoute.get('/post/:author_username', getAuthorPosts);
+postRoute.get('/post/:author_username', noauth, getAuthorPosts);
 
 /*
 @route 			POST api/v1/post
@@ -90,6 +91,6 @@ postRoute.put('/post/:id', [auth, validateDto(updatePostAjvValidate)], updatePos
 @description 	update a single blog post (just the comments) with given id
 @access 		Public (any one can comment)
 */
-postRoute.put('/post/:id/comments', updatePostComments);
+postRoute.put('/post/:id/comments', noauth, updatePostComments);
 
 export default postRoute;

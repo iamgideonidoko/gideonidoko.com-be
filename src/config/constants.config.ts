@@ -18,6 +18,7 @@ type Constants = {
     redisUsername: string;
     redisKeySpan: number;
     refreshTokensRedisKey: string;
+    noAuthKey: string;
 };
 
 const constants: Constants = {
@@ -34,6 +35,7 @@ const constants: Constants = {
     redisUsername: process.env.REDIS_USERNAME as string,
     redisKeySpan: 60 * 60 * 24 * 2, // 2 days
     refreshTokensRedisKey: 'refreshTokens',
+    noAuthKey: process.env.NO_AUTH_KEY as string,
 };
 
 export default constants;

@@ -1,6 +1,7 @@
 import { addAsset, deleteAsset, getAssets, getSearchedAssets } from './../controllers/asset.controller';
 import { Router } from 'express';
 import auth from '../middlewares/auth.middleware';
+import noauth from '../middlewares/noauth.middelware';
 
 const assetRoute = Router();
 
@@ -16,14 +17,14 @@ assetRoute.post('/asset', auth, addAsset);
 @description    Add a new asset.
 @access         Private
 */
-assetRoute.get('/assets/search', getSearchedAssets);
+assetRoute.get('/assets/search', noauth, getSearchedAssets);
 
 /*
 @route GET /api/v1/assets
 @description Get all assets.
 @access Public
 */
-assetRoute.get('/assets', getAssets);
+assetRoute.get('/assets', noauth, getAssets);
 
 // @route  DELETE /api/v1/asset/:id
 // @description   Delete an asset from the db
