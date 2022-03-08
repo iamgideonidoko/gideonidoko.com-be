@@ -18,6 +18,7 @@ import { strToSlug } from '../helpers/post.helper';
 import constants from '../../../config/constants.config';
 import { newPostCommentsAjvValidate } from '../schemas/post.schema';
 import Post from '../models/post.model';
+import { getReadTime } from '../helpers/post.helper';
 
 export const getPosts = async (req: Request, res: Response, next: NextFunction) => {
     const perPage = Number(req.query?.per_page) || 10;
@@ -147,6 +148,7 @@ export const createPost = async (req: Request, res: Response, next: NextFunction
             cover_img,
             author_username: author.username,
             author_name: author.name,
+            read_time: getReadTime(body),
             body,
             tags: tags ? tags : [],
             is_published: is_published ? true : false,
@@ -176,8 +178,13 @@ export const deletePost = async (req: Request, res: Response, next: NextFunction
 export const updatePost = async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
     if (!id) return next(createError(400, 'No `id` provided'));
+    let newUpdate = req.body;
+    const { body } = req.body;
+    if (body) {
+        newUpdate = { ...req.body, read_time: getReadTime(body) };
+    }
     try {
-        const updatedPost = await updatePostInDb(id, req.body);
+        const updatedPost = await updatePostInDb(id, newUpdate);
         return createSuccess(res, 200, 'Post updated successfully', { post: updatedPost });
     } catch (err) {
         return next(err);

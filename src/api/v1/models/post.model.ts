@@ -21,6 +21,7 @@ const PostSchema = new Schema<IPost>({
         required: true,
     },
     author_name: String,
+    read_time: string,
     body: {
         type: String,
         required: true,
