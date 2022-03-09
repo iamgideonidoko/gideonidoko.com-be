@@ -85,6 +85,12 @@ export const validateRefreshToken = (refreshToken: string): Promise<boolean> => 
                 const refreshTokenArr: string[] = removeExpiredRefreshTokens(JSON.parse(refreshTokens));
                 if (refreshTokenArr.indexOf(refreshToken) !== -1) {
                     // refresh token has not expired and is still in the redis cache
+                    // remove it from redis cache since a new one will be generated
+                    const newRefreshTokenArr = refreshTokenArr.filter((token) => token !== refreshToken);
+                    // write new arr to redis cache
+                    await redisClient.set(constants.refreshTokensRedisKey, JSON.stringify(newRefreshTokenArr), {
+                        NX: true,
+                    });
                     resolve(true);
                 } else {
                     // token does not exist in redis cache hence, invalid

@@ -177,13 +177,30 @@ export const deletePost = async (req: Request, res: Response, next: NextFunction
 
 export const updatePost = async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
+    const newTitle = req.query?.new_title?.toString();
     if (!id) return next(createError(400, 'No `id` provided'));
     let newUpdate = req.body;
-    const { body } = req.body;
+    const { body, title } = req.body;
     if (body) {
         newUpdate = { ...req.body, read_time: getReadTime(body) };
     }
     try {
+        if (title && newTitle === 'true') {
+            const postExists = await checkIfPostExists(title);
+            if (postExists)
+                return next(
+                    createError(
+                        400,
+                        ...[
+                            {
+                                message:
+                                    'A different blog post with the same title already exists and titles must be unique.',
+                                errorType: 'TITLE_ALREADY_EXISTS',
+                            },
+                        ],
+                    ),
+                );
+        }
         const updatedPost = await updatePostInDb(id, newUpdate);
         return createSuccess(res, 200, 'Post updated successfully', { post: updatedPost });
     } catch (err) {
