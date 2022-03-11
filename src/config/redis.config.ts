@@ -3,6 +3,8 @@ import constants from './constants.config';
 
 const redisClient = createClient({
     url: constants.redisURI,
+    username: constants.redisUsername,
+    password: constants.redisPassword,
 });
 
 redisClient.on('error', (err) => console.log('Redis Client Error => ', err));
