@@ -1,4 +1,4 @@
-import { updatePostInDb, updatePostCommentsInDb } from './../services/post.service';
+import { updatePostInDb, updatePostCommentsInDb, fetchSearchedPublishedPosts } from './../services/post.service';
 import { Request, Response, NextFunction } from 'express';
 import createError from 'http-errors';
 import { createSuccess } from '../helpers/http.helper';
@@ -63,6 +63,20 @@ export const getSearchedPosts = async (req: Request, res: Response, next: NextFu
     try {
         // const posts = await Post.find().sort({ created_at: -1 }); // get all posts sorted by creation time
         const posts = await fetchSearchedPosts(query); // get all posts sorted by creation time
+        return createSuccess(res, 200, 'Posts searched & fetched successfully', { posts });
+    } catch (err) {
+        return next(err);
+    }
+};
+
+export const getSearchedPublishedPosts = async (req: Request, res: Response, next: NextFunction) => {
+    const query = req.query?.q?.toString();
+    if (!query) return next(new createError.NotFound('No query found.'));
+    if (query.length < 2) return next(new createError.BadRequest('Query should be at least 2 characters long'));
+
+    try {
+        // const posts = await Post.find().sort({ created_at: -1 }); // get all posts sorted by creation time
+        const posts = await fetchSearchedPublishedPosts(query); // get all posts sorted by creation time
         return createSuccess(res, 200, 'Posts searched & fetched successfully', { posts });
     } catch (err) {
         return next(err);

@@ -105,6 +105,25 @@ export const fetchSearchedPosts = (query: string): Promise<unknown> => {
     });
 };
 
+export const fetchSearchedPublishedPosts = (query: string): Promise<unknown> => {
+    return new Promise<unknown>(async (resolve, reject) => {
+        try {
+            // strip special characters
+            query = query.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g, '');
+            const searchedPosts = await Post.find({
+                $or: [{ title: { $regex: query, $options: 'i' } }, { description: { $regex: query, $options: 'i' } }],
+                is_published: true,
+            })
+                .select('-body -comments')
+                .sort({ created_at: -1 })
+                .limit(10);
+            resolve(searchedPosts);
+        } catch (err) {
+            reject(err);
+        }
+    });
+};
+
 export const fetchPostBySlug = (slug: string): Promise<SinglePostReturn> => {
     return new Promise<SinglePostReturn>(async (resolve, reject) => {
         const redisKey = `getPost/${slug}`;
@@ -115,7 +134,7 @@ export const fetchPostBySlug = (slug: string): Promise<SinglePostReturn> => {
             } catch (err) {
                 console.log('Redis Error => ', err);
             }
-            const post = await Post.findOne({ slug });
+            const post = await Post.findOne({ slug, is_published: true });
             if (!post) reject(new createError.NotFound(`Post does not exist.`));
             const curId = post?._id;
             // previous post
@@ -174,7 +193,7 @@ export const fetchPaginatedPostsByTag = (
             } catch (err) {
                 console.log('Redis Error => ', err);
             }
-            const paginatedPosts = await Post.paginate({ tags: tag }, paginationOptions);
+            const paginatedPosts = await Post.paginate({ tags: tag, is_published: true }, paginationOptions);
             try {
                 await redisClient.set(redisKey, JSON.stringify(paginatedPosts), {
                     EX: constants.redisKeySpan,

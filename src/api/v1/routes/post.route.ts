@@ -6,6 +6,7 @@ import {
     updatePostComments,
     getPostsComments,
     getSearchedPosts,
+    getSearchedPublishedPosts,
 } from './../controllers/post.controller';
 import { Router } from 'express';
 import validateDto from '../middlewares/validateDto.middleware';
@@ -36,6 +37,13 @@ postRoute.get('/posts/pinned', noauth, getPinnedPosts);
 @access 		Public
 */
 postRoute.get('/posts/search', noauth, getSearchedPosts);
+
+/*
+@route 			GET /api/v1/posts/search?q=term
+@description 	Search through blog posts
+@access 		Public
+*/
+postRoute.get('/posts/searches', noauth, getSearchedPublishedPosts);
 
 /*
 @route 			GET /api/v1/posts/comments
