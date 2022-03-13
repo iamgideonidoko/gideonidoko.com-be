@@ -13,18 +13,14 @@ const noauth = (req: Request, _res: Response, next: NextFunction): void => {
     // return next();
 
     const noAuthKey = req.header('x-auth-api-key');
-    console.log('noAuthKey => ', noAuthKey);
 
     if (!noAuthKey) return next(new createError.Unauthorized());
 
     const timestamp = Number((noAuthKey as string).replace(`${constants.noAuthKey}`, ''));
-    console.log('noAuthKey => ', constants.noAuthKey);
-    console.log('timestamp => ', timestamp);
 
     if (!timestamp) return next(new createError.Unauthorized());
 
     const isValid = dayjs(timestamp).isBetween(dayjs().subtract(10, 'second'), dayjs());
-    console.log('isValid => ', isValid);
 
     if (!isValid) return next(new createError.Unauthorized());
 

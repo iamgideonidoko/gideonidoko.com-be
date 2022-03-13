@@ -53,17 +53,6 @@ app.use(limiter());
 // cors
 app.use(appCors());
 
-// (async () => {
-//     try {
-//         const res = await transporter.sendMail(
-//             mailOptions('Testing node mailer', 'love to see it work', '<b>Love to see it work</b>'),
-//         );
-//         console.log('Nodemailer response => ', res.response);
-//     } catch (err) {
-//         console.log('Nodemailer error => ', err);
-//     }
-// })();
-
 /* 
 @description    Connection to redis cache
 */

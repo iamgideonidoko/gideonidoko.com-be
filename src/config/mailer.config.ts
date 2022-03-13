@@ -83,7 +83,7 @@ const getMailHtml = (subject: string, html: string) => {
                       <td align="center" style="padding:0;Margin:0;padding-bottom:10px"><p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px"><strong>Email sent from  <a target="_blank" href="http://gideonidoko.com" style="-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;text-decoration:underline;color:#333333;font-size:14px">gideonidoko.com</a>.</strong></p></td> 
                      </tr> 
                      <tr style="border-collapse:collapse"> 
-                      <td align="center" style="padding:0;Margin:0;padding-top:10px;padding-bottom:10px"><p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px">© 2022</p></td> 
+                      <td align="center" style="padding:0;Margin:0;padding-top:10px;padding-bottom:10px"><p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px">© ${new Date().getFullYear()}</p></td> 
                      </tr> 
                    </table></td> 
                  </tr> 
@@ -107,7 +107,7 @@ export const mailOptions = (
 ): { from: string; to: string; subject: string; text: string; html: any } => {
     return {
         from: 'if3cofr3sh@gmail.com',
-        to: 'me@gideonidoko.com',
+        to: 'iamgideonidoko@gmail.com',
         subject: `GIDEONIDOKO.COM: ${subject}`,
         text,
         html: getMailHtml(subject, html),
