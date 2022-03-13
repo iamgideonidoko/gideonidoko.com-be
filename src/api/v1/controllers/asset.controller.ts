@@ -54,8 +54,8 @@ export const getSearchedAssets = async (req: Request, res: Response, next: NextF
     if (query.length < 2) return next(new createError.BadRequest('Query should be at least 2 characters long'));
 
     try {
-        const posts = await fetchSearchedAssets(query); // get all posts sorted by creation time
-        return createSuccess(res, 200, 'Assets searched & fetched successfully', { posts });
+        const assets = await fetchSearchedAssets(query); // get all posts sorted by creation time
+        return createSuccess(res, 200, 'Assets searched & fetched successfully', { assets });
     } catch (err) {
         return next(err);
     }

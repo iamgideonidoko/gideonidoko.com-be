@@ -23,6 +23,7 @@ export interface IPost extends Document {
     cover_img: string;
     author_username: string;
     author_name: string;
+    read_time: string;
     body: string;
     tags: Array<string>;
     is_published: boolean;
@@ -79,4 +80,16 @@ export interface PostUpdate {
     is_comment_disabled?: boolean;
     keywords?: string[];
     description?: string;
+}
+
+export interface SinglePostReturn {
+    post: IPost & { _id: string };
+    previousPost: Array<IPost & { _id: string }>;
+    nextPost: Array<IPost & { _id: string }>;
+}
+
+export interface CountOptions {
+    stripTags?: boolean;
+    hardReturns?: boolean;
+    ignore?: boolean;
 }

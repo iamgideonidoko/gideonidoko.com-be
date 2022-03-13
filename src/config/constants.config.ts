@@ -18,6 +18,9 @@ type Constants = {
     redisUsername: string;
     redisKeySpan: number;
     refreshTokensRedisKey: string;
+    noAuthKey: string;
+    mailerEmail: string;
+    mailerPassword: string;
 };
 
 const constants: Constants = {
@@ -27,13 +30,16 @@ const constants: Constants = {
     refreshTokenSecret: process.env.REFRESH_TOKEN_SECRET as Secret,
     commentsUpdateAccessKey: process.env.COMMENTS_UPDATE_ACCESS_KEY as string,
     contactPostAccessKey: process.env.CONTACT_POST_ACCESS_KEY as string,
-    accessTokenSpan: '5h',
-    refreshTokenSpan: '1y',
+    accessTokenSpan: '1h',
+    refreshTokenSpan: '2d',
     v1Base: '/api/v1',
     redisPassword: process.env.REDIS_PASSWORD as string,
     redisUsername: process.env.REDIS_USERNAME as string,
     redisKeySpan: 60 * 60 * 24 * 2, // 2 days
     refreshTokensRedisKey: 'refreshTokens',
+    noAuthKey: process.env.NO_AUTH_KEY as string,
+    mailerEmail: process.env.MAILER_EMAIL as string,
+    mailerPassword: process.env.MAILER_PASSWORD as string,
 };
 
 export default constants;

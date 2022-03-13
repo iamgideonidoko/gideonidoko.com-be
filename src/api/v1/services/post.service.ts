@@ -1,6 +1,6 @@
 import createError from 'http-errors';
 import Post from '../models/post.model';
-import { IPost, NewPost } from '../interfaces/post.interface';
+import { IPost, NewPost, SinglePostReturn } from '../interfaces/post.interface';
 import User from '../models/user.model';
 import { IUser } from '../interfaces/user.interface';
 import { PaginateOptions, PaginateResult } from 'mongoose';
@@ -31,7 +31,7 @@ export const fetchPaginatedPosts = (
             } catch (err) {
                 console.log('Redis Error => ', err);
             }
-            const paginatedPosts = await Post.paginate({}, paginationOptions);
+            const paginatedPosts = await Post.paginate({ is_published: true }, paginationOptions);
             try {
                 await redisClient.set(redisKey, JSON.stringify(paginatedPosts), {
                     EX: constants.redisKeySpan,
@@ -105,8 +105,27 @@ export const fetchSearchedPosts = (query: string): Promise<unknown> => {
     });
 };
 
-export const fetchPostBySlug = (slug: string): Promise<IPost & { _id: string }> => {
-    return new Promise<IPost & { _id: string }>(async (resolve, reject) => {
+export const fetchSearchedPublishedPosts = (query: string): Promise<unknown> => {
+    return new Promise<unknown>(async (resolve, reject) => {
+        try {
+            // strip special characters
+            query = query.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g, '');
+            const searchedPosts = await Post.find({
+                $or: [{ title: { $regex: query, $options: 'i' } }, { description: { $regex: query, $options: 'i' } }],
+                is_published: true,
+            })
+                .select('-body -comments')
+                .sort({ created_at: -1 })
+                .limit(10);
+            resolve(searchedPosts);
+        } catch (err) {
+            reject(err);
+        }
+    });
+};
+
+export const fetchPostBySlug = (slug: string): Promise<SinglePostReturn> => {
+    return new Promise<SinglePostReturn>(async (resolve, reject) => {
         const redisKey = `getPost/${slug}`;
         try {
             try {
@@ -115,17 +134,34 @@ export const fetchPostBySlug = (slug: string): Promise<IPost & { _id: string }> 
             } catch (err) {
                 console.log('Redis Error => ', err);
             }
-            const post = await Post.findOne({ slug });
+            const post = await Post.findOne({ slug, is_published: true });
             if (!post) reject(new createError.NotFound(`Post does not exist.`));
+            const curId = post?._id;
+            // previous post
+            const previousPost = await Post.find({ _id: { $lt: curId }, is_published: true })
+                .sort({ _id: -1 })
+                .select('title slug')
+                .limit(1);
+            // get next post
+            const nextPost = await Post.find({ _id: { $gt: curId }, is_published: true })
+                .sort({ _id: 1 })
+                .select('title slug')
+                .limit(1);
+
+            const singlePostReturn: SinglePostReturn = {
+                post: post as IPost & { _id: string },
+                previousPost: previousPost as (IPost & { _id: string })[],
+                nextPost: nextPost as (IPost & { _id: string })[],
+            };
             try {
-                await redisClient.set(redisKey, JSON.stringify(post), {
+                await redisClient.set(redisKey, JSON.stringify(singlePostReturn), {
                     EX: constants.redisKeySpan,
                     NX: true,
                 });
             } catch (err) {
                 console.log('Redis Error => ', err);
             }
-            resolve(post as IPost & { _id: string });
+            resolve(singlePostReturn);
         } catch (err) {
             reject(err);
         }
@@ -157,7 +193,7 @@ export const fetchPaginatedPostsByTag = (
             } catch (err) {
                 console.log('Redis Error => ', err);
             }
-            const paginatedPosts = await Post.paginate({ tags: tag }, paginationOptions);
+            const paginatedPosts = await Post.paginate({ tags: tag, is_published: true }, paginationOptions);
             try {
                 await redisClient.set(redisKey, JSON.stringify(paginatedPosts), {
                     EX: constants.redisKeySpan,

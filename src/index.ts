@@ -18,6 +18,7 @@ import authRoute from './api/v1/routes/auth.route';
 import postRoute from './api/v1/routes/post.route';
 import assetRoute from './api/v1/routes/asset.route';
 import contactRoute from './api/v1/routes/contact.route';
+import mailRoute from './api/v1/routes/mail.route';
 
 config();
 
@@ -99,6 +100,7 @@ app.use(constants.v1Base, authRoute);
 app.use(constants.v1Base, postRoute);
 app.use(constants.v1Base, assetRoute);
 app.use(constants.v1Base, contactRoute);
+app.use(constants.v1Base, mailRoute);
 
 // Error for unhandled routes
 app.use((req: Request, res: Response, next: NextFunction) => {

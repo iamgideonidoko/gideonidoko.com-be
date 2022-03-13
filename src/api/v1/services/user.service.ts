@@ -3,6 +3,7 @@ import User from '../models/user.model';
 import { NewUser, RegisterReturn } from '../interfaces/user.interface';
 import { hashPassword } from '../helpers/password.helper';
 import { signAccessToken, signRefreshToken } from '../helpers/jwt.helper';
+import { addRefreshTokenToCache } from '../helpers/redis.helper';
 
 export const addUserToDb = async (payload: NewUser): Promise<RegisterReturn> => {
     return new Promise<RegisterReturn>(async (resolve, reject) => {
@@ -29,6 +30,7 @@ export const addUserToDb = async (payload: NewUser): Promise<RegisterReturn> => 
                 // sign a new access token for the user using their id
                 const accessToken = await signAccessToken({ id });
                 const refreshToken = await signRefreshToken({ id });
+                await addRefreshTokenToCache(refreshToken);
                 resolve({
                     accessToken,
                     refreshToken,

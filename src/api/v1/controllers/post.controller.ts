@@ -1,4 +1,4 @@
-import { updatePostInDb, updatePostCommentsInDb } from './../services/post.service';
+import { updatePostInDb, updatePostCommentsInDb, fetchSearchedPublishedPosts } from './../services/post.service';
 import { Request, Response, NextFunction } from 'express';
 import createError from 'http-errors';
 import { createSuccess } from '../helpers/http.helper';
@@ -17,16 +17,26 @@ import {
 import { strToSlug } from '../helpers/post.helper';
 import constants from '../../../config/constants.config';
 import { newPostCommentsAjvValidate } from '../schemas/post.schema';
+import Post from '../models/post.model';
+import { getReadTime } from '../helpers/post.helper';
 
 export const getPosts = async (req: Request, res: Response, next: NextFunction) => {
     const perPage = Number(req.query?.per_page) || 10;
     const page = Number(req.query?.page) || 1;
-    // return res.json({ status: 'ok' });
-    console.log('Route => ', req.originalUrl);
+
     try {
         // const posts = await Post.find().sort({ created_at: -1 }); // get all posts sorted by creation time
         const posts = await fetchPaginatedPosts(page, perPage); // get all posts sorted by creation time
         return createSuccess(res, 200, 'Posts fetched successfully', { posts });
+    } catch (err) {
+        return next(err);
+    }
+};
+
+export const getPinnedPosts = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const posts = await Post.find({ is_pinned: true }).sort({ created_at: -1 }); // get all posts sorted by creation time
+        return createSuccess(res, 200, 'Pinned posts fetched successfully', { posts });
     } catch (err) {
         return next(err);
     }
@@ -53,6 +63,20 @@ export const getSearchedPosts = async (req: Request, res: Response, next: NextFu
     try {
         // const posts = await Post.find().sort({ created_at: -1 }); // get all posts sorted by creation time
         const posts = await fetchSearchedPosts(query); // get all posts sorted by creation time
+        return createSuccess(res, 200, 'Posts searched & fetched successfully', { posts });
+    } catch (err) {
+        return next(err);
+    }
+};
+
+export const getSearchedPublishedPosts = async (req: Request, res: Response, next: NextFunction) => {
+    const query = req.query?.q?.toString();
+    if (!query) return next(new createError.NotFound('No query found.'));
+    if (query.length < 2) return next(new createError.BadRequest('Query should be at least 2 characters long'));
+
+    try {
+        // const posts = await Post.find().sort({ created_at: -1 }); // get all posts sorted by creation time
+        const posts = await fetchSearchedPublishedPosts(query); // get all posts sorted by creation time
         return createSuccess(res, 200, 'Posts searched & fetched successfully', { posts });
     } catch (err) {
         return next(err);
@@ -138,6 +162,7 @@ export const createPost = async (req: Request, res: Response, next: NextFunction
             cover_img,
             author_username: author.username,
             author_name: author.name,
+            read_time: getReadTime(body),
             body,
             tags: tags ? tags : [],
             is_published: is_published ? true : false,
@@ -147,7 +172,7 @@ export const createPost = async (req: Request, res: Response, next: NextFunction
             description: description ? description : '',
         };
         const savedPost = await savePostToDb(newPost);
-        return createSuccess(res, 200, 'User registered successfully', { post: savedPost });
+        return createSuccess(res, 200, 'Post created successfully', { post: savedPost });
     } catch (err) {
         return next(err);
     }
@@ -166,9 +191,31 @@ export const deletePost = async (req: Request, res: Response, next: NextFunction
 
 export const updatePost = async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
+    const newTitle = req.query?.new_title?.toString();
     if (!id) return next(createError(400, 'No `id` provided'));
+    let newUpdate = req.body;
+    const { body, title } = req.body;
+    if (body) {
+        newUpdate = { ...req.body, read_time: getReadTime(body) };
+    }
     try {
-        const updatedPost = await updatePostInDb(id, req.body);
+        if (title && newTitle === 'true') {
+            const postExists = await checkIfPostExists(title);
+            if (postExists)
+                return next(
+                    createError(
+                        400,
+                        ...[
+                            {
+                                message:
+                                    'A different blog post with the same title already exists and titles must be unique.',
+                                errorType: 'TITLE_ALREADY_EXISTS',
+                            },
+                        ],
+                    ),
+                );
+        }
+        const updatedPost = await updatePostInDb(id, newUpdate);
         return createSuccess(res, 200, 'Post updated successfully', { post: updatedPost });
     } catch (err) {
         return next(err);

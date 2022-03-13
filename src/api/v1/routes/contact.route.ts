@@ -1,6 +1,7 @@
 import { getContacts, addContact, deleteContact } from './../controllers/contact.controller';
 import { Router } from 'express';
 import auth from '../middlewares/auth.middleware';
+import noauth from '../middlewares/noauth.middelware';
 
 const contactRoute = Router();
 
@@ -9,14 +10,14 @@ const contactRoute = Router();
 @description 	Get all available contacts
 @access 		Public
 */
-contactRoute.get('/contacts', getContacts);
+contactRoute.get('/contacts', noauth, getContacts);
 
 /*
 @route 			POST api/v1/contact
 @description 	Add a new contact info
 @access 		Private (auth needed)
 */
-contactRoute.post('/contact', addContact);
+contactRoute.post('/contact', noauth, addContact);
 
 /*
 @route 			DELETE api/v1/contact/:id

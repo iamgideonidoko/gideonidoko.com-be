@@ -1,5 +1,4 @@
 import bcrypt from 'bcryptjs';
-import path from 'path';
 
 const generateSalt = async (): Promise<string> => {
     const saltRounds = 10;
@@ -28,7 +27,6 @@ export const hashPassword = (password: string): Promise<string> => {
 export const validatePassword = async (userPassword: string, dbPassword: string): Promise<boolean> => {
     return new Promise<boolean>((resolve) => {
         bcrypt.compare(userPassword, dbPassword).then((isMatch) => {
-            console.log(path.basename(__filename) + 'isMatch => ', isMatch);
             resolve(isMatch);
         });
     });

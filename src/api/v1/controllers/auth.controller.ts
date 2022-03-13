@@ -1,9 +1,10 @@
 import { Request, Response, NextFunction } from 'express';
 import createError from 'http-errors';
-import { delRefreshToken, getNewTokens, getUserFromDb } from '../services/auth.service';
+import { getNewTokens, getUserFromDb } from '../services/auth.service';
 import { createSuccess } from '../helpers/http.helper';
 import User from '../models/user.model';
 import { LoggedInUserRequest } from '../interfaces/auth.interface';
+import { validateRefreshToken } from '../helpers/redis.helper';
 
 export const loginUser = async (req: Request, res: Response, next: NextFunction) => {
     const { username, password } = req.body;
@@ -33,27 +34,11 @@ export const refreshUserToken = async (req: Request, res: Response, next: NextFu
     }
 
     try {
+        const isValid = await validateRefreshToken(refreshToken);
+        if (!isValid) return next(new createError.Unauthorized());
         const tokens = await getNewTokens(refreshToken);
         if (tokens) {
-            return createSuccess(res, 200, 'Token refreshed successfully', tokens);
-        }
-    } catch (err) {
-        return next(err);
-    }
-};
-
-export const logoutUser = async (req: Request, res: Response, next: NextFunction) => {
-    const { refreshToken } = req.body;
-
-    //check if all input fields have value
-    if (!refreshToken) {
-        return next(createError(400, 'Please, enter all fields'));
-    }
-
-    try {
-        const value = await delRefreshToken(refreshToken);
-        if (value) {
-            return createSuccess(res, 200, 'User logged out successfully', value);
+            return createSuccess(res, 200, 'Token refreshed successfully', { tokens });
         }
     } catch (err) {
         return next(err);
