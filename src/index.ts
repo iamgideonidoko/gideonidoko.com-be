@@ -18,6 +18,7 @@ import authRoute from './api/v1/routes/auth.route';
 import postRoute from './api/v1/routes/post.route';
 import assetRoute from './api/v1/routes/asset.route';
 import contactRoute from './api/v1/routes/contact.route';
+import mailRoute from './api/v1/routes/mail.route';
 
 config();
 
@@ -51,6 +52,17 @@ app.use(limiter());
 
 // cors
 app.use(appCors());
+
+// (async () => {
+//     try {
+//         const res = await transporter.sendMail(
+//             mailOptions('Testing node mailer', 'love to see it work', '<b>Love to see it work</b>'),
+//         );
+//         console.log('Nodemailer response => ', res.response);
+//     } catch (err) {
+//         console.log('Nodemailer error => ', err);
+//     }
+// })();
 
 /* 
 @description    Connection to redis cache
@@ -99,6 +111,7 @@ app.use(constants.v1Base, authRoute);
 app.use(constants.v1Base, postRoute);
 app.use(constants.v1Base, assetRoute);
 app.use(constants.v1Base, contactRoute);
+app.use(constants.v1Base, mailRoute);
 
 // Error for unhandled routes
 app.use((req: Request, res: Response, next: NextFunction) => {
