@@ -1,4 +1,9 @@
-import { updatePostInDb, updatePostCommentsInDb, fetchSearchedPublishedPosts } from './../services/post.service';
+import {
+    updatePostInDb,
+    updatePostCommentsInDb,
+    fetchSearchedPublishedPosts,
+    fetchAllPostBySlug,
+} from './../services/post.service';
 import { Request, Response, NextFunction } from 'express';
 import createError from 'http-errors';
 import { createSuccess } from '../helpers/http.helper';
@@ -86,12 +91,22 @@ export const getSearchedPublishedPosts = async (req: Request, res: Response, nex
 // to get single post
 export const getPost = async (req: Request, res: Response, next: NextFunction) => {
     const { slug } = req.params;
+    const { type } = req.query;
     if (!slug) return next(createError(400, 'No slug provided'));
-    try {
-        const post = await fetchPostBySlug(slug);
-        return createSuccess(res, 200, 'Post fetched successfully', { post });
-    } catch (err) {
-        return next(err);
+    if (type && type === 'all') {
+        try {
+            const post = await fetchAllPostBySlug(slug);
+            return createSuccess(res, 200, 'Post fetched successfully', { post });
+        } catch (err) {
+            return next(err);
+        }
+    } else {
+        try {
+            const post = await fetchPostBySlug(slug);
+            return createSuccess(res, 200, 'Post fetched successfully', { post });
+        } catch (err) {
+            return next(err);
+        }
     }
 };
 

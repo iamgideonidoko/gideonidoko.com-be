@@ -60,6 +60,13 @@ postRoute.get('/posts/comments', noauth, getPostsComments);
 postRoute.get('/post/:slug', noauth, getPost);
 
 /*
+@route 			GET api/v1/post/:slug
+@description 	Get a single blog post with given slug
+@access 		Public
+*/
+postRoute.get('/post/:slug', noauth, getPost);
+
+/*
 @route 			GET api/v1/posts/:tag
 @description 	Get a blog posts with a certain tag
 @access 		Public

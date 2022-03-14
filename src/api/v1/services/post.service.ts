@@ -168,6 +168,33 @@ export const fetchPostBySlug = (slug: string): Promise<SinglePostReturn> => {
     });
 };
 
+export const fetchAllPostBySlug = (slug: string): Promise<IPost & { _id: string }> => {
+    return new Promise<IPost & { _id: string }>(async (resolve, reject) => {
+        const redisKey = `getPost/${slug}?type=all`;
+        try {
+            try {
+                const redisValue = await redisClient.get(redisKey);
+                if (redisValue) resolve(JSON.parse(redisValue));
+            } catch (err) {
+                console.log('Redis Error => ', err);
+            }
+            const post = await Post.findOne({ slug });
+            if (!post) reject(new createError.NotFound(`Post does not exist.`));
+            try {
+                await redisClient.set(redisKey, JSON.stringify(post), {
+                    EX: constants.redisKeySpan,
+                    NX: true,
+                });
+            } catch (err) {
+                console.log('Redis Error => ', err);
+            }
+            resolve(post as IPost & { _id: string });
+        } catch (err) {
+            reject(err);
+        }
+    });
+};
+
 export const fetchPaginatedPostsByTag = (
     tag: string,
     page: number,
