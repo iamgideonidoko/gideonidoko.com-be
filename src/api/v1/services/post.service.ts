@@ -197,7 +197,7 @@ export const fetchAllPostBySlug = (slug: string): Promise<IPost & { _id: string 
             } catch (err) {
                 console.log('Redis Error => ', err);
             }
-            const post = await Post.findOne({ slug });
+            const post = await Post.findOne({ slug }).select('-comments');
             if (!post) reject(new createError.NotFound(`Post does not exist.`));
             try {
                 await redisClient.set(redisKey, JSON.stringify(post), {
