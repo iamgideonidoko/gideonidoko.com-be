@@ -105,6 +105,25 @@ export const fetchSearchedPosts = (query: string): Promise<unknown> => {
     });
 };
 
+export const countPostsInDb = (): Promise<{
+    no_of_posts: number;
+    no_of_published_posts: number;
+    no_of_pinned_posts: number;
+}> => {
+    return new Promise<{ no_of_posts: number; no_of_published_posts: number; no_of_pinned_posts: number }>(
+        async (resolve, reject) => {
+            try {
+                const no_of_posts = await Post.find().select('_id').count();
+                const no_of_published_posts = await Post.find({ is_published: true }).select('_id').count();
+                const no_of_pinned_posts = await Post.find({ is_pinned: true }).select('_id').count();
+                resolve({ no_of_posts, no_of_published_posts, no_of_pinned_posts });
+            } catch (err) {
+                reject(err);
+            }
+        },
+    );
+};
+
 export const fetchSearchedPublishedPosts = (query: string): Promise<unknown> => {
     return new Promise<unknown>(async (resolve, reject) => {
         try {
@@ -162,6 +181,33 @@ export const fetchPostBySlug = (slug: string): Promise<SinglePostReturn> => {
                 console.log('Redis Error => ', err);
             }
             resolve(singlePostReturn);
+        } catch (err) {
+            reject(err);
+        }
+    });
+};
+
+export const fetchAllPostBySlug = (slug: string): Promise<IPost & { _id: string }> => {
+    return new Promise<IPost & { _id: string }>(async (resolve, reject) => {
+        const redisKey = `getPost/${slug}?type=all`;
+        try {
+            try {
+                const redisValue = await redisClient.get(redisKey);
+                if (redisValue) resolve(JSON.parse(redisValue));
+            } catch (err) {
+                console.log('Redis Error => ', err);
+            }
+            const post = await Post.findOne({ slug }).select('-comments');
+            if (!post) reject(new createError.NotFound(`Post does not exist.`));
+            try {
+                await redisClient.set(redisKey, JSON.stringify(post), {
+                    EX: constants.redisKeySpan,
+                    NX: true,
+                });
+            } catch (err) {
+                console.log('Redis Error => ', err);
+            }
+            resolve(post as IPost & { _id: string });
         } catch (err) {
             reject(err);
         }

@@ -1,4 +1,10 @@
-import { updatePostInDb, updatePostCommentsInDb, fetchSearchedPublishedPosts } from './../services/post.service';
+import {
+    updatePostInDb,
+    updatePostCommentsInDb,
+    fetchSearchedPublishedPosts,
+    fetchAllPostBySlug,
+    countPostsInDb,
+} from './../services/post.service';
 import { Request, Response, NextFunction } from 'express';
 import createError from 'http-errors';
 import { createSuccess } from '../helpers/http.helper';
@@ -28,6 +34,15 @@ export const getPosts = async (req: Request, res: Response, next: NextFunction) 
         // const posts = await Post.find().sort({ created_at: -1 }); // get all posts sorted by creation time
         const posts = await fetchPaginatedPosts(page, perPage); // get all posts sorted by creation time
         return createSuccess(res, 200, 'Posts fetched successfully', { posts });
+    } catch (err) {
+        return next(err);
+    }
+};
+
+export const getPostsStats = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const stats = await countPostsInDb(); // get stats on posts from db
+        return createSuccess(res, 200, 'Posts stats fetched successfully', { stats });
     } catch (err) {
         return next(err);
     }
@@ -86,12 +101,22 @@ export const getSearchedPublishedPosts = async (req: Request, res: Response, nex
 // to get single post
 export const getPost = async (req: Request, res: Response, next: NextFunction) => {
     const { slug } = req.params;
+    const { type } = req.query;
     if (!slug) return next(createError(400, 'No slug provided'));
-    try {
-        const post = await fetchPostBySlug(slug);
-        return createSuccess(res, 200, 'Post fetched successfully', { post });
-    } catch (err) {
-        return next(err);
+    if (type && type === 'all') {
+        try {
+            const post = await fetchAllPostBySlug(slug);
+            return createSuccess(res, 200, 'Post fetched successfully', { post });
+        } catch (err) {
+            return next(err);
+        }
+    } else {
+        try {
+            const post = await fetchPostBySlug(slug);
+            return createSuccess(res, 200, 'Post fetched successfully', { post });
+        } catch (err) {
+            return next(err);
+        }
     }
 };
 
