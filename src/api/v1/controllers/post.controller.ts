@@ -3,6 +3,7 @@ import {
     updatePostCommentsInDb,
     fetchSearchedPublishedPosts,
     fetchAllPostBySlug,
+    countPostsInDb,
 } from './../services/post.service';
 import { Request, Response, NextFunction } from 'express';
 import createError from 'http-errors';
@@ -33,6 +34,15 @@ export const getPosts = async (req: Request, res: Response, next: NextFunction) 
         // const posts = await Post.find().sort({ created_at: -1 }); // get all posts sorted by creation time
         const posts = await fetchPaginatedPosts(page, perPage); // get all posts sorted by creation time
         return createSuccess(res, 200, 'Posts fetched successfully', { posts });
+    } catch (err) {
+        return next(err);
+    }
+};
+
+export const getPostsStats = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const stats = await countPostsInDb(); // get stats on posts from db
+        return createSuccess(res, 200, 'Posts stats fetched successfully', { stats });
     } catch (err) {
         return next(err);
     }

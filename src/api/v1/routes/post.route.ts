@@ -10,7 +10,7 @@ import {
 } from './../controllers/post.controller';
 import { Router } from 'express';
 import validateDto from '../middlewares/validateDto.middleware';
-import { getPosts, getPinnedPosts, getPost, getPostsByTag } from '../controllers/post.controller';
+import { getPosts, getPinnedPosts, getPost, getPostsByTag, getPostsStats } from '../controllers/post.controller';
 import { newPostAjvValidate, updatePostAjvValidate } from '../schemas/post.schema';
 import auth from '../middlewares/auth.middleware';
 import noauth from '../middlewares/noauth.middelware';
@@ -60,11 +60,11 @@ postRoute.get('/posts/comments', noauth, getPostsComments);
 postRoute.get('/post/:slug', noauth, getPost);
 
 /*
-@route 			GET api/v1/post/:slug
-@description 	Get a single blog post with given slug
+@route 			GET api/v1/post/stats
+@description 	Get post stats
 @access 		Public
 */
-postRoute.get('/post/:slug', noauth, getPost);
+postRoute.get('/posts/stats', noauth, getPostsStats);
 
 /*
 @route 			GET api/v1/posts/:tag

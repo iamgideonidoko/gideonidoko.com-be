@@ -105,6 +105,25 @@ export const fetchSearchedPosts = (query: string): Promise<unknown> => {
     });
 };
 
+export const countPostsInDb = (): Promise<{
+    no_of_posts: number;
+    no_of_published_posts: number;
+    no_of_pinned_posts: number;
+}> => {
+    return new Promise<{ no_of_posts: number; no_of_published_posts: number; no_of_pinned_posts: number }>(
+        async (resolve, reject) => {
+            try {
+                const no_of_posts = await Post.find().select('_id').count();
+                const no_of_published_posts = await Post.find({ is_published: true }).select('_id').count();
+                const no_of_pinned_posts = await Post.find({ is_pinned: true }).select('_id').count();
+                resolve({ no_of_posts, no_of_published_posts, no_of_pinned_posts });
+            } catch (err) {
+                reject(err);
+            }
+        },
+    );
+};
+
 export const fetchSearchedPublishedPosts = (query: string): Promise<unknown> => {
     return new Promise<unknown>(async (resolve, reject) => {
         try {
