@@ -1,11 +1,9 @@
 import { Request, Response, NextFunction, ErrorRequestHandler } from 'express';
-import logger from '../../../config/logger.config';
+// import logger from '../../../config/logger.config';
 
 // Error handler for development environment
 const handleDevError: ErrorRequestHandler = (err, _req: Request, res: Response) => {
-    logger.error({
-        message: `[globalErrorHandler.middleware.ts] (line 7) - ${err.message}`,
-    });
+    console.error(`[Global Error Handler] - ${err.message}`);
 
     return res.status(err.statusCode).json({
         ...err,
@@ -18,17 +16,17 @@ const handleProdError: ErrorRequestHandler = (err, req: Request, res: Response) 
     if (req.originalUrl.startsWith('/api/v1')) {
         // Operational, trusted error: send message to client
         if (err.isOperational) {
+            console.error(`[Global Error Handler (Operational Error)] - ${err.message}`);
             return res.status(err.statusCode).json({
                 status: err.status,
                 message: err.message,
             });
         }
 
-        // Programming or other unknown error: don't leak error details
-        // 1) Log error
-        logger.error(`[globalErrorHandler.middleware.ts] (line 31) - ${err.message}`);
+        console.error(`[Global Error Handler (Programming/Unknown Error)] - ${err.message}`);
 
-        // 2) Send generic message
+        // Programming or other unknown error: don't leak error details
+        // Send generic message
         return res.status(500).json({
             status: 'error',
             message: 'Something went wrong!',
@@ -37,7 +35,7 @@ const handleProdError: ErrorRequestHandler = (err, req: Request, res: Response) 
 
     // Programming or other unknown error: don't leak error details
     // 1) Log error
-    logger.error(`[globalErrorHandler.middleware.ts] (line 42) - ${err.message}`);
+    console.error(`[Global Error Handler (Programming/Unknown Error)] - ${err.message}`);
 };
 
 const globalErrorHandler: ErrorRequestHandler = (err, req: Request, res: Response, next: NextFunction) => {
