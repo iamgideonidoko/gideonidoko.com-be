@@ -1,5 +1,4 @@
 import { Request, Response, NextFunction, ErrorRequestHandler } from 'express';
-// import logger from '../../../config/logger.config';
 
 // Error handler for development environment
 const handleDevError: ErrorRequestHandler = (err, _req: Request, res: Response) => {
