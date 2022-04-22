@@ -20,7 +20,7 @@ const noauth = (req: Request, _res: Response, next: NextFunction): void => {
 
     if (!timestamp) return next(new createError.Unauthorized());
 
-    const isValid = dayjs(timestamp).isBetween(dayjs().subtract(10, 'second'), dayjs());
+    const isValid = dayjs(timestamp).isBetween(dayjs().subtract(10, 'minute'), dayjs());
 
     if (!isValid) return next(new createError.Unauthorized());
 
