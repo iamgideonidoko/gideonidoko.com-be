@@ -21,6 +21,7 @@ type Constants = {
     noAuthKey: string;
     mailerEmail: string;
     mailerPassword: string;
+    sendgridApiKey: string;
 };
 
 const constants: Constants = {
@@ -40,6 +41,7 @@ const constants: Constants = {
     noAuthKey: process.env.NO_AUTH_KEY as string,
     mailerEmail: process.env.MAILER_EMAIL as string,
     mailerPassword: process.env.MAILER_PASSWORD as string,
+    sendgridApiKey: process.env.SENDGRID_API_KEY as string,
 };
 
 export default constants;

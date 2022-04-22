@@ -1,18 +1,10 @@
-import nodemailer from 'nodemailer';
 import constants from './constants.config';
 import { decode } from 'html-entities';
+import mail from '@sendgrid/mail';
 
-// create reusable transporter object using the default SMTP transport
-export const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-        user: constants.mailerEmail, // generated ethereal user
-        pass: constants.mailerPassword, // generated ethereal password
-    },
-    tls: {
-        rejectUnauthorized: false,
-    },
-});
+mail.setApiKey(constants.sendgridApiKey);
+
+export const sendgridMail = mail;
 
 const getMailHtml = (subject: string, html: string) => {
     return (
@@ -106,9 +98,9 @@ export const mailOptions = (
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): { from: string; to: string; subject: string; text: string; html: any } => {
     return {
-        from: 'if3cofr3sh@gmail.com',
+        from: 'me@gideonidoko.com',
         to: 'iamgideonidoko@gmail.com',
-        subject: `GIDEONIDOKO.COM: ${subject}`,
+        subject: `EMAIL:GIDEONIDOKO.COM: ${subject}`,
         text,
         html: getMailHtml(subject, html),
     };

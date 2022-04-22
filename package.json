@@ -25,6 +25,7 @@
   "author": "Gideon Idoko <iamgideonidoko@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "@sendgrid/mail": "^7.6.2",
     "ajv": "^8.10.0",
     "ajv-formats": "^2.1.1",
     "bcryptjs": "^2.4.3",

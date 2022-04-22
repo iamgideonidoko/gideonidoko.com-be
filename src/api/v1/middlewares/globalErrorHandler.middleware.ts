@@ -3,7 +3,7 @@ import { Request, Response, NextFunction, ErrorRequestHandler } from 'express';
 
 // Error handler for development environment
 const handleDevError: ErrorRequestHandler = (err, _req: Request, res: Response) => {
-    console.error(`[Global Error Handler] - ${err.message}`);
+    console.error(`[Global Error Handler] - globalErrorHandler.middleware.ts line:6 => ${err.message}`);
 
     return res.status(err.statusCode).json({
         ...err,
@@ -16,14 +16,18 @@ const handleProdError: ErrorRequestHandler = (err, req: Request, res: Response) 
     if (req.originalUrl.startsWith('/api/v1')) {
         // Operational, trusted error: send message to client
         if (err.isOperational) {
-            console.error(`[Global Error Handler (Operational Error)] - ${err.message}`);
+            console.error(
+                `[Global Error Handler (Operational Error)] - globalErrorHandler.middleware.ts line:24 => ${err.message}`,
+            );
             return res.status(err.statusCode).json({
                 status: err.status,
                 message: err.message,
             });
         }
 
-        console.error(`[Global Error Handler (Programming/Unknown Error)] - ${err.message}`);
+        console.error(
+            `[Global Error Handler (Programming/Unknown Error)] - globalErrorHandler.middleware.ts line:33 => ${err.message}`,
+        );
 
         // Programming or other unknown error: don't leak error details
         // Send generic message
@@ -35,7 +39,9 @@ const handleProdError: ErrorRequestHandler = (err, req: Request, res: Response) 
 
     // Programming or other unknown error: don't leak error details
     // 1) Log error
-    console.error(`[Global Error Handler (Programming/Unknown Error)] - ${err.message}`);
+    console.error(
+        `[Global Error Handler (Programming/Unknown Error)] - globalErrorHandler.middleware.ts line:47 => ${err.message}`,
+    );
 };
 
 const globalErrorHandler: ErrorRequestHandler = (err, req: Request, res: Response, next: NextFunction) => {
